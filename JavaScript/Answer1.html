@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        function calculate()
+        {
+            var principal = prompt("Enter the principal");
+            var rate = prompt("Enter the rate");
+            const time = prompt("Enter time");
+         var interest=(principal*rate*time)/100;
+            document.write(interest);
+
+        }
+    </script>
+</head>
+
+<body>
+<h1>Simple Interest Calculation</h1>
+<button onclick="calculate()">Calculate</button>
+
+
+</body>
+</html>
