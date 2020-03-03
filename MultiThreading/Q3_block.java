@@ -1,36 +1,39 @@
-package MultiThreading;
-// 4. Write a program using synchronization block and synchronization method
-public class Q3_block {
-    public static int i=0;
-    public static void main(String[] args) {
-        SyncBlock obj=new SyncBlock();
-        TestingBlock t1=new TestingBlock(obj);
-        TestingBlock t2=new TestingBlock(obj);
-        t1.start();
-        t2.start();
+// Answer 5: Using Synchronized Method
+package Multithreading;
+class Counter
+{
+     int count;
+    public synchronized void increment()
+    {
+        count=count+1;
+    }
+}
+public class SynchronizedConcept  {
+    public static void main(String[] args) throws Exception{
+        {
+            Counter c=new Counter();
+            Thread t1=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for(int i=0;i<100;i++)
+                    {
+                        c.increment();
+                }}
+            });
+            Thread t2=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for(int i=0;i<100;i++)
+                    {
+                        c.increment();
+                    }}
+            });
+            t1.start();
+            t2.start();
+           t1.join();
+           t2.join();
 
-    }
-}
-class SyncBlock {
-    void Synching(){
-      synchronized (this) {
-           for(Q3_block.i=0; Q3_block.i<10; Q3_block.i++){
-               System.out.println("i= "+ Q3_block.i);
-           }
-           try {
-               Thread.sleep(400);
-           } catch (InterruptedException e) {
-               e.printStackTrace();
-           }
-       }
-    }
-}
-class TestingBlock extends Thread{
-    SyncBlock sync;
-    TestingBlock(SyncBlock sync){
-        this.sync=sync;
-    }
-    public void run(){
-        sync.Synching();
+            System.out.println("Count" +" "+c.count);
+        }
     }
 }
