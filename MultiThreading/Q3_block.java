@@ -1,24 +1,28 @@
-// Answer 5: Using Synchronized Method
+//Synchronization Block
 package Multithreading;
-class Counter
-{
-     int count;
-    public synchronized void increment()
+
+class Counter1 {
+
+    int count;
+    public void increment()
     {
+        String tName=Thread.currentThread().getName();
+        System.out.println(tName);
+        synchronized(this){                                                    //synchronized block
         count=count+1;
-    }
+    }}
 }
-public class SynchronizedConcept  {
+public class SynchronizedBlock  {
     public static void main(String[] args) throws Exception{
         {
-            Counter c=new Counter();
+            Counter1 c=new Counter1();
             Thread t1=new Thread(new Runnable() {
                 @Override
                 public void run() {
                     for(int i=0;i<100;i++)
                     {
                         c.increment();
-                }}
+                    }}
             });
             Thread t2=new Thread(new Runnable() {
                 @Override
@@ -30,10 +34,12 @@ public class SynchronizedConcept  {
             });
             t1.start();
             t2.start();
-           t1.join();
-           t2.join();
+            t1.join();
+            t2.join();
 
             System.out.println("Count" +" "+c.count);
         }
     }
 }
+
+
