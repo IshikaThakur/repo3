@@ -1,0 +1,13 @@
+Ques 9:-Which method on the session object can be used to remove an object from the cache?
+Answer:-evict()
+Ques 10:-What does @transactional annotation do?
+Answer:-@Transactional annotation is used when you want the certain method/class to be executed in a transaction.
+
+        Let's assume user A wants to transfer 100rs to user B. What happens is:
+
+        We decrease A's account by 100rs
+        We add 100rs to B's account
+        Let's assume the exception is thrown after succeeding 1) and before executing 2).
+        Now we would have some kind of inconsistency because A lost 100rs while B got nothing.
+        Transactions means all or nothing.
+        If there is an exception thrown somewhere in the method, changes are not persisted in the database,rollback happens.
