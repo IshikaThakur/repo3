@@ -1,5 +1,6 @@
 package com.registration.registeruser.entity;
 
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,13 +8,12 @@ import java.util.Set;
 @Entity
 @Table(name = "seller")
 @PrimaryKeyJoinColumn(name = "id")
-public class Seller extends User {
-
-    private Long userId;
+public class Seller extends User{
+    @Id
+    private Long id;
     private Long gst;
     private Long companyContact;
     private String companyName;
-
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private Set<Product> products;
@@ -26,12 +26,13 @@ public class Seller extends User {
         this.setRoles(rolesModels);
     }
 
-    public Long getUserId() {
-        return userId;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getGst() {
@@ -66,7 +67,4 @@ public class Seller extends User {
         this.products = products;
     }
 }
-
-
-
 

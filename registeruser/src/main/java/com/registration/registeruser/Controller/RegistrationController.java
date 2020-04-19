@@ -1,10 +1,10 @@
 package com.registration.registeruser.Controller;
 
-import com.registration.registeruser.Dao.TokenDao;
-import com.registration.registeruser.DtOs.CustomerDto;
-import com.registration.registeruser.DtOs.SellerDto;
+import com.registration.registeruser.dao.TokenDao;
+import com.registration.registeruser.dto.CustomerDto;
+import com.registration.registeruser.dto.SellerDto;
 import com.registration.registeruser.Exception.EmailAlreadyExistsException;
-import com.registration.registeruser.MailVerification;
+import com.registration.registeruser.MailService;
 import com.registration.registeruser.Services.CustomerService;
 import com.registration.registeruser.Services.SellerService;
 import com.registration.registeruser.entity.Customer;
@@ -12,17 +12,16 @@ import com.registration.registeruser.entity.Seller;
 import com.registration.registeruser.repository.CustomerRepository;
 import com.registration.registeruser.repository.SellerRepository;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 @RestController
 public class RegistrationController {
+
     @Autowired
-    CustomerRepository customerRepository;
+    TokenDao tokenDao;
+
     @Autowired
     CustomerService customerService;
 
@@ -31,44 +30,47 @@ public class RegistrationController {
     @Autowired
     SellerService sellerService;
 
-   @Autowired
-    Customer customer;
 
     @Autowired
-    Seller seller;
+    MailService mailVerification;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Autowired
-    MailVerification mailVerification;
+   ModelMapper modelMapper;
+    public Customer ToCustomer(CustomerDto customerDto){
+        Customer customer=modelMapper.map(customerDto, Customer.class);
+        System.out.println("dto to customer object");
+        return customer;
+    }
 
-    @Autowired
-    TokenDao tokenDao;
-
-
-    @GetMapping("/customer/register")
-    String saveCustomer(@Valid @RequestBody CustomerDto customerDto){
+    @PostMapping("/customer/register")              //sucessful
+    String saveCustomer( @RequestBody CustomerDto customerDto){
         if(customerRepository.findByEmail(customerDto.getEmail())==null) {
-            customer = customerService.convtToCustomer(customerDto);
-            mailVerification.sendNotificaitoin(customer);
+            Customer customer = customerService.ToCustomer(customerDto);
+            mailVerification.sendNotification(customer);
             customerRepository.save(customer);
-            return "Success";
+            return "Success,";
         }
         else
             throw new EmailAlreadyExistsException("Customer of this email already exist");
 
     }
 
-    @GetMapping("/customer/verify")
-    void verifycustomer(@RequestParam("token") String toke){
-        tokenDao.verifyToken(toke);
+    @GetMapping("/customer_verification")
+    void verifycustomer(@RequestParam("token") String token){
+        tokenDao.verifyToken(token);
+        System.out.println("Token is valid");
 
     }
 
-    @GetMapping("/register/seller")
-    String saveSeller(@Valid @RequestBody SellerDto sellerDto){
+    @PostMapping ("/seller/register")
+    String saveSeller( @RequestBody SellerDto sellerDto){
         if(sellerRepository.findByGst(sellerDto.getGst())== null || sellerRepository.findByCompanyContact(sellerDto.getCompanyContact())== null || sellerRepository.findByCompanyName(sellerDto.getCompanyName())== null){
-            seller= sellerService.convtToSeller(sellerDto);
+           Seller seller= sellerService.mappingToSeller(sellerDto);
+          // mailVerification.sendNotification(seller);
             sellerRepository.save(seller);
-            return "Success";
+            return "Registration Successful...";
         }
 
         else
@@ -76,8 +78,8 @@ public class RegistrationController {
     }
 
     @GetMapping("/seller/verify")
-    void verifyseller(@RequestParam("token") String toke){
-        tokenDao.verifyToken(toke);
+    void verifySeller(@RequestParam("token") String token){
+        tokenDao.verifyToken(token);
 
     }
 }

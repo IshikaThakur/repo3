@@ -1,7 +1,7 @@
 package com.registration.registeruser.Security;
 
 
-import com.registration.registeruser.Dao.AppUserDetailsService;
+import com.registration.registeruser.dao.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,17 +44,19 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/admin/home").hasAnyRole("ADMIN")
-                .antMatchers("/seller/home").hasAnyRole("SELLER", "ADMIN")
-                .antMatchers("/home").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/home/customer").hasAnyRole("ADMIN", "USER", "CUSTOMER")
-                .antMatchers("/register/*").anonymous()
-                .antMatchers("/activate/*").anonymous()
-                .anyRequest().authenticated()
+                .antMatchers("/*").permitAll()
+                .antMatchers("/register/*").permitAll()
+                .antMatchers("/login").permitAll()
+              //  .antMatchers("/admin/*").hasAnyRole("ADMIN")
+               // .antMatchers("/customer/*").hasAnyRole("ADMIN", "USER", "CUSTOMER")
+               // .antMatchers("/seller/*").hasAnyRole("ROLE_SELLER", "ADMIN")
+              //  .antMatchers("/home").hasAnyRole("ADMIN", "USER")
+              //  .antMatchers("/doLogout").hasAnyRole("ADMIN", "USER", "CUSTOMER")
+              //  .antMatchers("/password/*").hasAnyRole("ADMIN", "USER", "CUSTOMER")
+              //  .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .csrf().disable();
+                 .csrf().disable();
     }
 }

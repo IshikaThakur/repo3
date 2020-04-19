@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Token {
+public class TokenGenerator {
     @Id
     @GeneratedValue
     Long id;
@@ -15,6 +15,8 @@ public class Token {
     String randomToken;
     Long timeInMill;
     boolean isExpired;
+
+
 
     public Long getId() {
         return id;

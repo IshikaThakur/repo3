@@ -1,4 +1,4 @@
-package com.registration.registeruser.DtOs;
+package com.registration.registeruser.dto;
 
 
 

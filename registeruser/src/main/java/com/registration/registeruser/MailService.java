@@ -1,31 +1,31 @@
 package com.registration.registeruser;
 
 
-import com.registration.registeruser.Dao.TokenDao;
+import com.registration.registeruser.dao.TokenDao;
 import com.registration.registeruser.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-public class MailVerification {
-
-    private JavaMailSender javaMailSender;
+@Service
+public class MailService {
 
     @Autowired
     TokenDao tokenDao;
 
+    private JavaMailSender javaMailSender;
+
     @Autowired
-    public MailVerification(JavaMailSender javaMailSender){
+    public MailService(JavaMailSender javaMailSender){
         this.javaMailSender = javaMailSender;
     }
-    public void sendNotificaitoin(User user) throws MailException {
-        System.out.println("Sending email...");
+    public void  sendNotification(User user) throws MailException {
+        System.out.println("Sending email for verification process...");
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
-        mail.setFrom("ishikathakur880@gmail.com");
-        mail.setSubject("To verify account");
+        mail.setFrom("tanu.thakur0816@gmail.com");
+        mail.setSubject("Account Verification==================================");
         String uu = tokenDao.getToken(user);
         mail.setText(uu);
         javaMailSender.send(mail);

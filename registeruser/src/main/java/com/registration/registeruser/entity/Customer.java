@@ -1,15 +1,14 @@
 package com.registration.registeruser.entity;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 @Entity
 @Table(name = "customer")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Customer extends User{
 
-    private Long contact;
+    Long contact;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Product_Review> product_reviews;
@@ -19,6 +18,15 @@ public class Customer extends User{
 
     @OneToOne(mappedBy = "customer")
     private Cart cart;
+
+public  Customer()
+{
+
+}
+    public Customer(String email, String firstName, String middleName, String lastName,String password,Long contact) {
+        super(email, firstName, middleName, lastName);
+        this.contact = contact;
+    }
 
     public Cart getCart() {
         return cart;
@@ -44,13 +52,13 @@ public class Customer extends User{
         this.product_reviews = product_reviews;
     }
 
-    public Customer(){
-        Role rolesModel2= new Role();
+ /*   public Customer(){
+        Role rolesModel2= new Role("ROLE_CUSTOMER");
         rolesModel2.setRole("CUSTOMER");
         Set<Role> rolesModels = new HashSet<>();
         rolesModels.add(rolesModel2);
         this.setRoles(rolesModels);
-    }
+    }*/
 
     public Long getContact() {
         return contact;

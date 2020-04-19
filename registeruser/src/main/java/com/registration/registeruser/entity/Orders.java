@@ -12,12 +12,7 @@ public class Orders {
         private Long amountPaid;
         private String dateCreated;
         private String paymentMethod;
-/*    private String CUSTOMER_ADDRESS_CITY;
-    private String CUSTOMER_ADDRESS_STATE;
-    private String CUSTOMER_ADDRESS_COUNTRY;
-    private String CUSTOMER_ADDRESS_ADDRESS_LINE;
-    private String CUSTOMER_ADDRESS_ZIP_CODE;
-    private String CUSTOMER_ADDRESS_LABEL;*/
+
 
         @Embedded
         OrderAddress orderAddress;

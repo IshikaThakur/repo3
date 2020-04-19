@@ -1,13 +1,21 @@
 package com.registration.registeruser.Services;
 
-import com.registration.registeruser.Dao.TokenDao;
+import com.registration.registeruser.dao.TokenDao;
+import com.registration.registeruser.dto.AddressDto;
 import com.registration.registeruser.Exception.UserNotFoundException;
-import com.registration.registeruser.MailVerification;
-import com.registration.registeruser.entity.Token;
+import com.registration.registeruser.MailService;
+import com.registration.registeruser.dto.CustomerDto;
+import com.registration.registeruser.entity.Address;
+import com.registration.registeruser.entity.Customer;
+import com.registration.registeruser.entity.TokenGenerator;
 import com.registration.registeruser.entity.User;
+import com.registration.registeruser.repository.AddressRepository;
+import com.registration.registeruser.repository.CustomerRepository;
 import com.registration.registeruser.repository.TokenRepository;
 import com.registration.registeruser.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -21,15 +29,22 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    AddressRepository addressRepository;
 
     private JavaMailSender javaMailSender;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Autowired
     TokenDao tokenDao;
     @Autowired
     TokenRepository tokenRepository;
     @Autowired
-    MailVerification mailVerification;
+    MailService mailVerification;
+
+    @Autowired
+    CurrentUserService currentUserService;
 
     @Autowired
     public UserService(JavaMailSender javaMailSender){
@@ -70,7 +85,7 @@ public class UserService {
         {
             throw new UserNotFoundException("user with this id is not present");
         }
-        System.out.println("message is"+message);
+        System.out.println("Id activated");
     }
 
     @Async
@@ -128,8 +143,8 @@ public class UserService {
     }
 
     public void setPassword(String token_on_mail, String password) {
-        Token token1 = null;
-        for (Token token : tokenRepository.findAll()) {
+        TokenGenerator token1 = null;
+        for (TokenGenerator token : tokenRepository.findAll()) {
             if (token.getRandomToken().equals(token_on_mail)) {
                 token1 = token;
             }
@@ -138,7 +153,7 @@ public class UserService {
             System.out.println("invalid token");
         } else {
             if (token1.isExpired()) {
-                mailVerification.sendNotificaitoin(userRepository.findByUsername(token1.getName()));
+                mailVerification.sendNotification(userRepository.findByUsername(token1.getName()));
                 tokenRepository.delete(token1);
             } else {
                 User user2 = userRepository.findByUsername(token1.getName());
@@ -146,6 +161,64 @@ public class UserService {
                 userRepository.save(user2);
                 tokenRepository.delete(token1);
             }
+
         }
     }
+    public ResponseEntity<String> updateAddressById(String email, Long addressId, AddressDto addressDto) {
+        Optional<Address> address = addressRepository.findById(addressId);
+        User user = userRepository.findByEmail(email);
+
+        if(!address.isPresent()){
+            return new ResponseEntity<>("No address found with the given id;", HttpStatus.NOT_FOUND);
+        }
+        Address savedAddress = address.get();
+        if(!savedAddress.getUser().getEmail().equals(email)){
+            return new ResponseEntity<>("Invalid Operation", HttpStatus.CONFLICT);
+        }
+
+        if(addressDto.getAddressLine() != null)
+            savedAddress.setAddressLine(addressDto.getAddressLine());
+
+        if(addressDto.getCity() != null)
+            savedAddress.setCity(addressDto.getCity());
+
+        if(addressDto.getState() != null)
+            savedAddress.setState(addressDto.getState());
+
+        if(addressDto.getCountry() != null)
+            savedAddress.setCountry(addressDto.getCountry());
+
+        if(addressDto.getZipCode() != null)
+            savedAddress.setZipCode(addressDto.getZipCode());
+
+        if(addressDto.getLabel() != null)
+            savedAddress.setLabel(addressDto.getLabel());
+
+        return new ResponseEntity<>("Address Updated", HttpStatus.OK);
+    }
+    public String updateProfile(CustomerDto customer){
+        String username=currentUserService.getUser();
+        Customer customer1=customerRepository.findByUsername(username);
+        if (customer.getFirstName()!=null)
+            customer1.setFirstName(customer.getFirstName());
+        if (customer.getMiddleName()!=null)
+            customer1.setMiddleName(customer.getMiddleName());
+        if (customer.getLastName()!=null)
+            customer1.setLastName(customer.getLastName());
+        if (customer.getContact()!=null)
+        {
+            if (customer.getContact().toString().matches("(\\+91|0)[0-9]{10}"))
+            {
+                customer1.setContact(customer.getContact());
+            }
+            else
+            {
+                return "Password mismatch";
+            }
+        }
+        customerRepository.save(customer1);
+        return "success";
+    }
 }
+
+

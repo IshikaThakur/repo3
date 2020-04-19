@@ -1,16 +1,22 @@
 package com.registration.registeruser.entity;
 
+
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Entity
+public class Role
+{
 
-public class Role {
     @Id
-   private Long id;
-   private String role;
+    @GeneratedValue
+    Long id;
+    String role;
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
@@ -48,6 +54,3 @@ public class Role {
         this.users = users;
     }
 }
-
-
-

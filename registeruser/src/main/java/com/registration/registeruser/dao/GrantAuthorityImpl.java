@@ -1,4 +1,4 @@
-package com.registration.registeruser.Dao;
+package com.registration.registeruser.dao;
 
 import org.springframework.security.core.GrantedAuthority;
 

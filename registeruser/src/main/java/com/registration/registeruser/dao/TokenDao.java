@@ -1,17 +1,19 @@
-package com.registration.registeruser.Dao;
+package com.registration.registeruser.dao;
 
 
 
 import com.registration.registeruser.Exception.TokenNotFoundException;
-import com.registration.registeruser.MailVerification;
-import com.registration.registeruser.entity.Token;
+import com.registration.registeruser.MailService;
+import com.registration.registeruser.entity.TokenGenerator;
 import com.registration.registeruser.entity.User;
 import com.registration.registeruser.repository.TokenRepository;
 import com.registration.registeruser.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 import java.util.UUID;
+@Service
 public class TokenDao {
 
     @Autowired
@@ -19,9 +21,9 @@ public class TokenDao {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    MailVerification mailVerification;
+    MailService mailVerification;
     public String getToken(User user){
-        Token token = new Token();
+        TokenGenerator token = new TokenGenerator();
         String uu = UUID.randomUUID().toString();
         token.setRandomToken(uu);
         token.setTimeInMill(System.currentTimeMillis());
@@ -31,8 +33,8 @@ public class TokenDao {
     }
 
     public void verifyToken(String u) {
-        Token token1 = null;
-        for (Token token : tokenRepository.findAll()) {
+        TokenGenerator token1 = null;
+        for (TokenGenerator token : tokenRepository.findAll()) {
             if (token.getRandomToken().equals(u)) {
                 token1 = token;
             }
@@ -43,7 +45,7 @@ public class TokenDao {
         } else {
             if (token1.isExpired())
             {
-                mailVerification.sendNotificaitoin(userRepository.findByUsername(token1.getName()));
+                mailVerification.sendNotification(userRepository.findByUsername(token1.getName()));
                 tokenRepository.delete(token1);
             } else {
                 System.out.println("saving");

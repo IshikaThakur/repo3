@@ -24,11 +24,6 @@ public class Product_Variation {
     @ManyToOne
     @JoinColumn(name = "Cart_Product_Variation_id")
     private Cart cart;
-    /*
-"METADATA (Type: JSON - available in mysql to store a JSON as it is.)
-(Note: will contain all the information regarding variations in JSON format)
-(All variations of same category will have a fixed similar JSON structure)"
-PRIMARY_IMAGE_NAME*/
 
     public Cart getCart() {
         return cart;

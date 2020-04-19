@@ -9,8 +9,8 @@ public class OrderAddress {
     private String state;
     private String country;
     private String addressLine;
-    private Long zipCode;
-    private String label; /*(Ex. office/home)*/
+    private String zipCode;
+    private String label;
 
 
     public OrderAddress(Address address){
@@ -63,11 +63,11 @@ public class OrderAddress {
         this.addressLine = addressLine;
     }
 
-    public Long getZipCode() {
+    public String getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(Long zipCode) {
+    public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 

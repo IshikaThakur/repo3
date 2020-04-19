@@ -1,4 +1,4 @@
-package com.registration.registeruser.Dao;
+package com.registration.registeruser.dao;
 
 import com.registration.registeruser.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

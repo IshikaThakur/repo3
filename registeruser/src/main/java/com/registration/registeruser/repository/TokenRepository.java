@@ -1,7 +1,7 @@
 package com.registration.registeruser.repository;
 
-import com.registration.registeruser.entity.Token;
+import com.registration.registeruser.entity.TokenGenerator;
 import org.springframework.data.repository.CrudRepository;
 
-public interface TokenRepository extends CrudRepository<Token,Long> {
+public interface TokenRepository extends CrudRepository<TokenGenerator,Long> {
 }
