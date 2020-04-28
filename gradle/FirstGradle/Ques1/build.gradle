@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+}
+apply plugin : A
+
+//creating task
+task abc(type: Jar){
+    println "hello"
+}
+
+//creating custom plugin
+class A implements Plugin<Project>
+{
+    @Override
+    void apply(Project target)
+    {
+        target.task("myTask")
+                {
+                    doLast {
+                        println new Date()
+                    }
+                }
+    }
+}
+
+//using dependsOn
+myTask.dependsOn(abc)
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+//adding dependecies
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+//for creating executable jar
+jar{
+    manifest.attributes("Main-class" : "Q1")
+}
