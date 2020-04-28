@@ -12,6 +12,14 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectId" id="1b4ChQZWlNg2DjuWMe39SzVXQxt" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -65,25 +73,29 @@
       <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="449" y="145" width="524" height="502" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/67.27.1299.741@67.27.1299.741" timestamp="1588009997226" />
-    <state width="1253" height="175" key="GridCell.Tab.0.bottom" timestamp="1588010023298">
+    <state x="499" y="154" width="424" height="484" key="FileChooserDialogImpl" timestamp="1588034061823">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="175" key="GridCell.Tab.0.bottom/67.27.1299.741@67.27.1299.741" timestamp="1588010023298" />
-    <state width="1253" height="175" key="GridCell.Tab.0.center" timestamp="1588010023296">
+    <state x="499" y="154" width="424" height="484" key="FileChooserDialogImpl/67.27.1299.741@67.27.1299.741" timestamp="1588034061823" />
+    <state width="1253" height="167" key="GridCell.Tab.0.bottom" timestamp="1588084789167">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="175" key="GridCell.Tab.0.center/67.27.1299.741@67.27.1299.741" timestamp="1588010023296" />
-    <state width="1253" height="175" key="GridCell.Tab.0.left" timestamp="1588010023295">
+    <state width="1253" height="167" key="GridCell.Tab.0.bottom/67.27.1299.741@67.27.1299.741" timestamp="1588084789167" />
+    <state width="1253" height="167" key="GridCell.Tab.0.center" timestamp="1588084789165">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="175" key="GridCell.Tab.0.left/67.27.1299.741@67.27.1299.741" timestamp="1588010023295" />
-    <state width="1253" height="175" key="GridCell.Tab.0.right" timestamp="1588010023297">
+    <state width="1253" height="167" key="GridCell.Tab.0.center/67.27.1299.741@67.27.1299.741" timestamp="1588084789165" />
+    <state width="1253" height="167" key="GridCell.Tab.0.left" timestamp="1588084789164">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1253" height="175" key="GridCell.Tab.0.right/67.27.1299.741@67.27.1299.741" timestamp="1588010023297" />
-    <state x="67" y="27" width="1289" height="741" key="new project wizard" timestamp="1588005865006">
+    <state width="1253" height="167" key="GridCell.Tab.0.left/67.27.1299.741@67.27.1299.741" timestamp="1588084789164" />
+    <state width="1253" height="167" key="GridCell.Tab.0.right" timestamp="1588084789166">
       <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state x="67" y="27" width="1289" height="741" key="new project wizard/67.27.1299.741@67.27.1299.741" timestamp="1588005865006" />
+    <state width="1253" height="167" key="GridCell.Tab.0.right/67.27.1299.741@67.27.1299.741" timestamp="1588084789166" />
+    <state x="67" y="27" width="1289" height="741" key="new project wizard" timestamp="1588034528038">
+      <screen x="67" y="27" width="1299" height="741" />
+    </state>
+    <state x="67" y="27" width="1289" height="741" key="new project wizard/67.27.1299.741@67.27.1299.741" timestamp="1588034528038" />
   </component>
 </project>
