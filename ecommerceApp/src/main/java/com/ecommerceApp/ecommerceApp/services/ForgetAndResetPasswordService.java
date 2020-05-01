@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -55,5 +56,41 @@ public class ForgetAndResetPasswordService {
         }
         return "check email to reset password";
     }
-
+    public String resetPassword(PasswordDto passwordDto, String Token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(Token);
+        String password = passwordDto.getPassword();
+        String confirmPassword = passwordDto.getConfirmPassword();
+        if (verificationToken.getEmail() == null) {
+            return "http://localhost:8080/resetPassword?token=" + verificationToken.getToken()+ "expired";
+        } else {
+            if (!password.equals(confirmPassword)) {
+                throw new PasswordNotMatchedException("password and confirm password doesn't matched");
+            } else {
+                String email = verificationToken.getEmail();
+                System.out.println("just to check");
+                Users users = userRepository.findByEmail(email);
+                if (users.getEmail() == null) {
+                    throw new UserNotFountException("user not found");
+                } else {
+                    try {
+                        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                        simpleMailMessage.setSubject("Account security issue");
+                        simpleMailMessage.setFrom("tanu.thakur0816@gmail.com");
+                        simpleMailMessage.setText("To reset your password, please click on the Link given below :" + "" +
+                                "\n http://localhost:8080/resetPassword?token=" + verificationToken.getToken());
+                        simpleMailMessage.setTo(users.getEmail());
+                        emailSenderService.sendEmail(simpleMailMessage);
+                        String encodePassword = passwordEncoder.encode(password);
+                        userRepository.updatePassword(encodePassword, users.getEmail());
+                        verificationTokenRepository.deleteById(verificationToken.getId());
+                    } catch (Exception ex) {
+                        return " click the reset password link again";
+                    }
+                }
+            }
+            return "password changed successfully";
+        }
+    }
 }
+
+

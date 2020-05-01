@@ -1,5 +1,7 @@
 package com.ecommerceApp.ecommerceApp.validators;
 
+import com.ecommerceApp.ecommerceApp.dtos.UserRegistrationDto;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -10,8 +12,10 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     }
 
     @Override
-    public boolean isValid(Object value, ConstraintValidatorContext context) {
-        return false;
+    public boolean isValid(Object obj, ConstraintValidatorContext context) {
+
+        UserRegistrationDto user=(UserRegistrationDto)obj;
+        return user.getPassword().equals(user.getConfirmPassword());
     }
 }
 

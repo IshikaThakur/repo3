@@ -16,7 +16,7 @@ public class ActivationDeactivationService {
 
     public String ActivateUser(Long id, WebRequest request) {
         Optional<Users> user = userRepository.findById(id);
-        String message ;
+        String message;
 
         if (!user.isPresent()) {
             message = "no user is present of id = " + id + "";
@@ -35,8 +35,9 @@ public class ActivationDeactivationService {
                 message = "User account has been activated";
             }
         }
-       return "activated";
+        return "activated";
     }
+
     public String DeactivateUser(Long id, WebRequest request) {
         Optional<Users> user = userRepository.findById(id);
         String message;
@@ -60,4 +61,32 @@ public class ActivationDeactivationService {
         }
         return "de-activated";
     }
-}
+
+    public String ActivateUserAccount(Long id, WebRequest request) {
+        Optional<Users> user = userRepository.findById(id);
+        String text;
+        if (!user.isPresent()) {
+            text = "no user is present of such id=" + id + "";
+        }
+        else {
+           Users saveUser=user.get();
+           if(saveUser.isAccountNonLocked())
+           {
+               text="User account is already active";
+           }
+           else
+           {
+            saveUser.setAccountNonLocked(true);
+            userRepository.save(saveUser);
+               SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+               simpleMailMessage.setSubject("Account Activation");
+               simpleMailMessage.setText("Your account has been activated");
+               simpleMailMessage.setTo(saveUser.getEmail());
+               emailSenderService.sendEmail(simpleMailMessage);
+               text = "User account has been unlocked";
+           }
+           }
+    return "Account Unlocked";
+    }}
+
+

@@ -1,24 +1,35 @@
 package com.ecommerceApp.ecommerceApp.dtos;
+import com.ecommerceApp.ecommerceApp.validators.PasswordMatches;
+import com.ecommerceApp.ecommerceApp.validators.ValidPassword;
+
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class UserRegistrationDto {
     @NotNull
+    @NotEmpty
     private String firstName;
 
     @NotNull
     private String middleName;
 
     @NotNull
+    @NotEmpty
     private String lastName;
 
     @Email
+    @NotEmpty(message = "{email.notempty}")
     private String email;
 
-    @NotNull
-    private String password;
 
     @NotNull
+    @ValidPassword
+    private String password;
+
+
+    @NotNull
+    @ValidPassword
     private String confirmPassword;
 
 

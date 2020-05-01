@@ -49,7 +49,6 @@ public class CustomerService {
     PasswordEncoder passwordEncoder;
 
 
-
     Customer initializeNewCustomer(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setActive(false);
@@ -70,9 +69,13 @@ public class CustomerService {
         Customer customer = modelMapper.map(customerRegistrationDto, Customer.class);
 
         if (customerRepository.findByEmail(customer.getEmail()) != null) // User already exists with this email
-            throw new EmailAlreadyExistsException("User already exists with email : " + customer.getEmail());
-        else {
-            customerRepository.save(initializeNewCustomer(customer));   // saving the Customer
+        { // throw new EmailAlreadyExistsException("User already exists with email : " + customer.getEmail());
+            return new ResponseEntity("Email id already exists", HttpStatus.CONFLICT);
+        } else if (!customerRegistrationDto.getPassword().equals(customerRegistrationDto.getConfirmPassword())) {
+            return new ResponseEntity("There is a password mismatch you entered,Try again", HttpStatus.BAD_REQUEST);
+
+        } else {
+            customerRepository.save(initializeNewCustomer(customer));
 
             VerificationToken verificationToken = new VerificationToken(customer);
             verificationTokenRepository.save(verificationToken);
@@ -86,8 +89,10 @@ public class CustomerService {
                     + "http://localhost:8080/register/confirm?token=" + verificationToken.getToken());
 
             mailService.sendEmail(mailMessage);
+
         }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return new ResponseEntity("Registration Successful",HttpStatus.CREATED);
+       // return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     public String validateRegistrationToken(String userToken) {
@@ -118,56 +123,61 @@ public class CustomerService {
         return customerDto;
     }
 
-  public  CustomerDto getCustomerByEmail(String email){
+    public CustomerDto getCustomerByEmail(String email) {
         Customer customer = customerRepository.findByEmail(email);
         CustomerDto customerDto = toCustomerDto(customer);
         return customerDto;
-  }
-  public CustomerViewProfileDto toCustomerViewProfile(Customer customer){
-        CustomerViewProfileDto customerViewProfileDto = modelMapper.map(customer,CustomerViewProfileDto.class);
+    }
+
+    public CustomerViewProfileDto toCustomerViewProfile(Customer customer) {
+        CustomerViewProfileDto customerViewProfileDto = modelMapper.map(customer, CustomerViewProfileDto.class);
         return customerViewProfileDto;
-  }
-  public CustomerViewProfileDto getcustomerProfile(String email){
+    }
+
+    public CustomerViewProfileDto getcustomerProfile(String email) {
 
         Customer customer = customerRepository.findByEmail(email);
 
-        if(customer == null)
-            throw new UserNotFountException("not found")      ;
+        if (customer == null)
+            throw new UserNotFountException("not found");
 
         CustomerViewProfileDto customerViewProfileDto = toCustomerViewProfile(customer);
 
         return customerViewProfileDto;
-  }
-    public ResponseEntity<String> updateCustomerProfile(String email, CustomerViewProfileDto customerViewProfileDto){
-        Customer customer=customerRepository.findByEmail(email);
-        if(customerViewProfileDto.getFirstName()!=null)
+    }
+
+    public ResponseEntity<String> updateCustomerProfile(String email, CustomerViewProfileDto customerViewProfileDto) {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customerViewProfileDto.getFirstName() != null)
             customer.setFirstName(customerViewProfileDto.getFirstName());
-        if(customerViewProfileDto.getMiddleName()!=null)
+        if (customerViewProfileDto.getMiddleName() != null)
             customer.setMiddleName(customerViewProfileDto.getMiddleName());
-        if(customerViewProfileDto.getLastName()!=null)
+        if (customerViewProfileDto.getLastName() != null)
             customer.setLastName(customerViewProfileDto.getLastName());
-        if(customerViewProfileDto.getContact() != null)
+        if (customerViewProfileDto.getContact() != null)
             customer.setContact(customerViewProfileDto.getContact());
         customerRepository.save(customer);
-        return new ResponseEntity<>("Profile Updated",HttpStatus.OK);
+        return new ResponseEntity<>("Profile Updated", HttpStatus.OK);
 
     }
 
-    public  Set getCustomerAllAdress(String email) {
+    public Set getCustomerAllAdress(String email) {
         Customer customer = customerRepository.findByEmail(email);
         Set<AddressDto> addressDtoSet = new HashSet<>();
         Set<Address> addresses = customer.getAddresses();
         addresses.forEach(address -> addressDtoSet.add(addressService.toAddressDto(address)));
         return addressDtoSet;
     }
+
     public ResponseEntity<String> addNewAddress(String email, AddressDto addressDto) {
         Customer customer = customerRepository.findByEmail(email);
         Address newAddress = addressService.toAddress(addressDto);
         customer.addAddress(newAddress);
         customerRepository.save(customer);
-        String message="Address added successfully";
+        String message = "Address added successfully";
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
+
     public ResponseEntity<String> deleteAddress(String email, Long id) {
         Optional<Address> addressOptional = addressRepository.findById(id);
         if (!addressOptional.isPresent()) {
@@ -184,11 +194,11 @@ public class CustomerService {
     public ResponseEntity<String> updateCustomerAddress(String username, AddressDto addressDto, Long id) {
         Optional<Address> address = addressRepository.findById(id);
         if (!address.isPresent())
-            return new ResponseEntity<>("Address not found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Address not found", HttpStatus.NOT_FOUND);
         Address savedAddress = address.get();
         Users users = userRepository.findByEmail(username);
         if (!savedAddress.getUser().getEmail().equals(username))
-            return new ResponseEntity<>("Address not found",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Address not found", HttpStatus.BAD_REQUEST);
         if (addressDto.getCity() != null)
             savedAddress.setCity(addressDto.getCity());
         if (addressDto.getState() != null)
@@ -202,8 +212,9 @@ public class CustomerService {
         if (addressDto.getAddressLine() != null)
             savedAddress.setLabel(addressDto.getAddressLine());
         addressRepository.save(savedAddress);
-        return new ResponseEntity<>("Success",HttpStatus.OK);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
+
     public Customer getCurrentCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser userDetail = (AppUser) authentication.getPrincipal();
@@ -211,6 +222,7 @@ public class CustomerService {
         Customer customer = customerRepository.findByEmail(username);
         return customer;
     }
+
     @Transactional
     public void updateCustomerPassword(PasswordDto password) {
         Customer customer = getCurrentCustomer();
@@ -219,8 +231,7 @@ public class CustomerService {
         if (password1.equals(confirmPassword)) {
             customer.setPassword(passwordEncoder.encode(password1));
             customerRepository.save(customer);
-        }
-        else
+        } else
             throw new PasswordNotMatchedException("password didn't matched");
     }
 

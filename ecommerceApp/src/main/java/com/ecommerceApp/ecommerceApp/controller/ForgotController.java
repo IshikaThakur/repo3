@@ -19,5 +19,9 @@ public class ForgotController {
        return   forgetAndResetPasswordService.forgot_password(users.getEmail());
 
     }
-
+@PostMapping(path = "/resetPassword/{token}")
+    public String resetPassword(@Valid @RequestBody PasswordDto passwordDto,@PathVariable("token")String token )
+{
+    return forgetAndResetPasswordService.resetPassword(passwordDto, token);
+}
 }

@@ -92,9 +92,10 @@ public class SellerService {
     }
 
     public String registerSeller(SellerRegistrationDto sellerRegistrationDto) {
-        if (!(check_if_all_details_unique(sellerRegistrationDto) == "unique")) {
-            return "Invalid data";
-        }
+      //  if (!(check_if_all_details_unique(sellerRegistrationDto) == "unique"))
+        //  {
+         //   return "Invalid data";
+      //  }
         Seller seller = toSeller(sellerRegistrationDto);
         seller.setPassword(passwordEncoder.encode(seller.getPassword()));
         sellerRepository.save(seller);

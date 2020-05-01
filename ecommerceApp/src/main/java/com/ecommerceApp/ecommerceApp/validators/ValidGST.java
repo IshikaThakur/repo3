@@ -8,9 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD, ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EmailValidator.class)
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Target({METHOD,FIELD,ANNOTATION_TYPE})
+@Retention(RUNTIME)
+@Constraint(validatedBy = GSTValidator.class)
 public @interface ValidGST {
 
     String message()  default "Invalid GST";

@@ -11,7 +11,7 @@ public interface SellerRepository extends CrudRepository<Seller,Long> {
     List<Seller> findAll();
     List<Seller> findAll(Pageable pageable);
 
-    Seller findByGST(String gst);
+    Seller findByGST(String GST);
 
     Seller findByCompanyName(String name);
 }

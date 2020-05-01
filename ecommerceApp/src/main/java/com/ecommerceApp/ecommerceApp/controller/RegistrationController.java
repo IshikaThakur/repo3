@@ -7,6 +7,7 @@ import com.ecommerceApp.ecommerceApp.services.CustomerService;
 import com.ecommerceApp.ecommerceApp.services.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ public class RegistrationController {
 
     @PostMapping("/register/customer")
     ResponseEntity registerCustomer(@Valid @RequestBody CustomerRegistrationDto customerRegistrationDto) {
+
         return customerService.createNewCustomer(customerRegistrationDto);
     }
 

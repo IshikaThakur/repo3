@@ -60,6 +60,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/resetPassword/{token}").anonymous()
                .antMatchers("/admin/*").hasAnyRole("ADMIN")
                 .antMatchers("/seller/*").hasAnyRole("SELLER")
+                .antMatchers("/doLogout").hasAnyRole("ADMIN","USER")
 
                 .anyRequest().authenticated()
                 .and()

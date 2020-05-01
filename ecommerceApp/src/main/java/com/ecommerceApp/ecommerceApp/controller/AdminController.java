@@ -10,7 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Arrays;
 import java.util.List;
-/////////////done
+
 @RestController
 public class AdminController {
     @Autowired
@@ -49,5 +49,10 @@ public class AdminController {
     @PutMapping("/admin/deactivate/{id}")
     public String deActivateUser(@PathVariable Long id, WebRequest webRequest) {
         return activation_deactivation_service.DeactivateUser(id, webRequest);
+    }
+    @PutMapping("/admin/activate/account/{id}")
+    public String activateUserAccount(@PathVariable Long id,WebRequest webRequest)
+    {
+        return activation_deactivation_service.ActivateUserAccount(id,webRequest);
     }
 }

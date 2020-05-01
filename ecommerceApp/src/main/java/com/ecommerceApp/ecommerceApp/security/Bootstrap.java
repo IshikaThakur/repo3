@@ -1,6 +1,8 @@
 package com.ecommerceApp.ecommerceApp.security;
 
+import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.RoleRepository;
+import com.ecommerceApp.ecommerceApp.Repositories.SellerRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.UserRepository;
 import com.ecommerceApp.ecommerceApp.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,10 @@ public class Bootstrap implements ApplicationRunner {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    SellerRepository sellerRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -40,7 +46,7 @@ public class Bootstrap implements ApplicationRunner {
         admin1.addRole(admin);
         admin1.addRole(seller);
         admin1.addAddress(new Address("1153", "Bulanshahar", "Uttar Pradesh", "202394", "India","Home"));
-        admin1.setActive(true);
+      //  admin1.setActive(true);
 
         Customer customer1 = new Customer("mayankrajput552@gmail.com", "Mayank", "",
                 "Rajput", "98374564567");
@@ -72,6 +78,14 @@ public class Bootstrap implements ApplicationRunner {
         userRepository.save(customer1);
 
         System.out.println("Total users saved::" + userRepository.count());
+        Product shirt = new Product("Shirt", "Check based design", "Levi's");
+        shirt.setSeller(sellerRepository.findByEmail("rounakSheikh@gmail.com"));
+        //shirt.setCategory("Clothes");
+        Product jeans = new Product("Jeans", "slim fit", "Crimson club");
+        shirt.setId(100L);
+        jeans.setId(101L);
+        productRepository.save(shirt);
+        productRepository.save(jeans);
 
     }
 }
