@@ -20,7 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -237,4 +239,32 @@ public class SellerService {
         else
             throw new PasswordNotMatchedException("password and confirmPassword didn't matched");
     }
+
+
+    public ResponseEntity<String>activateSellerAccount(Long id,SellerDto sellerDto)
+    {
+        Optional<Users>user=userRepository.findById(id);
+        if(!user.isPresent()){
+            return new ResponseEntity<>("No seller found with the given id;", HttpStatus.NOT_FOUND);
+        }
+        else
+        {
+
+            Users saveUser=user.get();
+        if(sellerDto.isActive()!=true) {
+            saveUser.setActive(sellerDto.isActive());
+            userRepository.save(saveUser);
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setSubject("Account Activation");
+            simpleMailMessage.setText("Your account has been activated");
+            simpleMailMessage.setTo(saveUser.getEmail());
+            emailSenderService.sendEmail(simpleMailMessage);
+           // message = "User account has been activated";
+            return new ResponseEntity<>("Account activated", HttpStatus.OK);
+
+        }
+       else
+            return new ResponseEntity<>("User is already active",HttpStatus.OK);
+
+    }}
 }

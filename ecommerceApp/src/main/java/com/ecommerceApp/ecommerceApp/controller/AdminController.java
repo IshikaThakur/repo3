@@ -1,13 +1,19 @@
 package com.ecommerceApp.ecommerceApp.controller;
+import com.ecommerceApp.ecommerceApp.dtos.AddressDto;
 import com.ecommerceApp.ecommerceApp.dtos.CustomerDto;
 import com.ecommerceApp.ecommerceApp.dtos.SellerDto;
+import com.ecommerceApp.ecommerceApp.entities.Users;
 import com.ecommerceApp.ecommerceApp.services.ActivationDeactivationService;
 import com.ecommerceApp.ecommerceApp.services.CustomerService;
 import com.ecommerceApp.ecommerceApp.services.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +48,7 @@ public class AdminController {
     }
 
     @PutMapping("/admin/activate/{id}")
-    public String activateUser(@PathVariable Long id, WebRequest webRequest) {
+    public String activateUser(@PathVariable Long id, @RequestBody CustomerDto customerDto, WebRequest webRequest) {
         return activation_deactivation_service.ActivateUser(id, webRequest);
     }
 
@@ -55,4 +61,10 @@ public class AdminController {
     {
         return activation_deactivation_service.ActivateUserAccount(id,webRequest);
     }
+    @PatchMapping("/admin/activate/seller/{id}")
+    public ResponseEntity<String> activateSellerAccount(@RequestBody SellerDto sellerDto, @PathVariable Long id, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        return sellerService.activateSellerAccount(id, sellerDto);
+    }
+
 }
