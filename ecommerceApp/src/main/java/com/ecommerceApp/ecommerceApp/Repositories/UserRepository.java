@@ -2,12 +2,14 @@ package com.ecommerceApp.ecommerceApp.Repositories;
 
 
 import com.ecommerceApp.ecommerceApp.entities.Users;
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<Users, Long> {
@@ -19,4 +21,10 @@ public interface UserRepository extends CrudRepository<Users, Long> {
     @Modifying
     @Query(value = "update Users set password=:Password where email=:email")
     void updatePassword(@Param("Password") String password, @Param("email") String email);
+
+
+
+
+
+    List<Users> findByisActive(boolean b);
 }

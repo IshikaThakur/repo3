@@ -5,6 +5,7 @@ import com.ecommerceApp.ecommerceApp.security.Role;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -240,4 +241,6 @@ public class Users {
     public boolean isEnabled() {
         return isEnabled;
     }
+
+
 }

@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 
 public class EcommerceAppApplication {
 
