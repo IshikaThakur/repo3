@@ -1,10 +1,15 @@
 package com.ecommerceApp.ecommerceApp.dtos;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class SellerDto {
     private Long id;
     private String firstName;
     private String middleName;
     private String lastName;
+    @NotEmpty
+    @NotNull
     private boolean isActive;
     private String GST;
     private String companyName;

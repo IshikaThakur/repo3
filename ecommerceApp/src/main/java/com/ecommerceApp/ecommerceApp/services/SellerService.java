@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -241,18 +242,18 @@ public class SellerService {
     }
 
 
-    public ResponseEntity<String>activateSellerAccount(Long id,SellerDto sellerDto)
+    public ResponseEntity<String>activateSellerAccount(Long id, SellerDto sellerDto)
     {
         Optional<Users>user=userRepository.findById(id);
+        Users saveUser=user.get();
         if(!user.isPresent()){
-            return new ResponseEntity<>("No seller found with the given id;", HttpStatus.NOT_FOUND);
+            //return new ResponseEntity<>("No seller found with the given id;", HttpStatus.NOT_FOUND);
+            String message="no user of such id found";
+            return new ResponseEntity<>("No seller found with the given id;", HttpStatus.OK);
         }
-        else
-        {
 
-            Users saveUser=user.get();
-        if(sellerDto.isActive()!=true) {
-            saveUser.setActive(sellerDto.isActive());
+       else if(sellerDto.isActive()!=true) {
+            saveUser.setActive(true);
             userRepository.save(saveUser);
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setSubject("Account Activation");
@@ -266,5 +267,29 @@ public class SellerService {
        else
             return new ResponseEntity<>("User is already active",HttpStatus.OK);
 
-    }}
-}
+    }
+  public ResponseEntity<String>deactivateSellerAccount(Long id,SellerDto sellerDto)
+    {
+        Optional<Users>user=userRepository.findById(id);
+        Users saveUser=user.get();
+        if(!user.isPresent()){
+            return new ResponseEntity<>("No seller found with the given id;", HttpStatus.NOT_FOUND);
+        }
+        else
+        {
+            if(sellerDto.isActive()==false) {
+                saveUser.setActive(false);
+                userRepository.save(saveUser);
+                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                simpleMailMessage.setSubject("Account Deactivation");
+                simpleMailMessage.setText("Your account has been deactivated");
+                simpleMailMessage.setTo(saveUser.getEmail());
+                emailSenderService.sendEmail(simpleMailMessage);
+                // message = "User account has been activated";
+                return new ResponseEntity<>("Account deactivated", HttpStatus.OK);
+
+            }
+            else
+                return new ResponseEntity<>("User is already deactivated",HttpStatus.OK);
+
+        }}}

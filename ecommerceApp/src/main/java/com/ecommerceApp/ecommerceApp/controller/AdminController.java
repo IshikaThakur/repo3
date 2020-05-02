@@ -66,5 +66,9 @@ public class AdminController {
         Principal principal = request.getUserPrincipal();
         return sellerService.activateSellerAccount(id, sellerDto);
     }
+   @PatchMapping("/admin/deactivate/seller/{id}")
+    public ResponseEntity<String> deactivateSellerAccount(@RequestBody SellerDto sellerDto, @PathVariable Long id, HttpServletRequest request){
+        return sellerService.deactivateSellerAccount(id, sellerDto);
+    }
 
 }
