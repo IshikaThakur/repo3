@@ -1,8 +1,10 @@
 package com.ecommerceApp.ecommerceApp.entities;
+import com.ecommerceApp.ecommerceApp.auditing.Auditable;
+
 import javax.persistence.*;
 
 @Entity
-public class Address  {
+public class Address extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

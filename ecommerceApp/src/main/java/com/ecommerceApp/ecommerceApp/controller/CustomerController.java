@@ -4,6 +4,7 @@ import com.ecommerceApp.ecommerceApp.dtos.AddressDto;
 import com.ecommerceApp.ecommerceApp.dtos.CustomerViewProfileDto;
 import com.ecommerceApp.ecommerceApp.dtos.PasswordDto;
 import com.ecommerceApp.ecommerceApp.services.CustomerService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.Set;
 public class CustomerController {
     @Autowired
     CustomerService customerService;
-
+@ApiOperation(value = "shows customer profile",notes="shows the profile for the logged in customer")
         @GetMapping("/customer/view/profile")
             public CustomerViewProfileDto getprofile(HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
