@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class CategoryController {
     @Autowired
@@ -18,7 +20,7 @@ public class CategoryController {
     CategoryMetaDataFieldService categoryMetaDataFieldService;
 
     @PostMapping("categories")
-    public String addProduct(@RequestBody Category category) {
+    public String addCategory(@RequestBody Category category) {
        categoryService.addCategory(category);
         return "category added successfully";
     }
@@ -31,6 +33,17 @@ public class CategoryController {
     public ResponseEntity addMetaDataField(@RequestParam String fieldName) {
         return categoryMetaDataFieldService.addNewMetadataField(fieldName);
     }
+//=================list of metadata fields
+    @GetMapping("/metadata-fields")
+    public ResponseEntity<List> getAllMetadataFields(@RequestParam(defaultValue = "0") String offset,
+                                                     @RequestParam(defaultValue = "10") String size,
+                                                     @RequestParam(defaultValue = "id") String sortByField,
+                                                     @RequestParam(defaultValue = "ascending") String order,
+                                                     @RequestParam(required = false) Long categoryId) {
 
+        return categoryMetaDataFieldService.getAllMetadataFields(offset, size, sortByField, order, categoryId);
+
+
+    }
 
 }

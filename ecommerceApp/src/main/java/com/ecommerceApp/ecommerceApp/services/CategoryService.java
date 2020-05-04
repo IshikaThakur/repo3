@@ -70,12 +70,6 @@ public class CategoryService {
        return new ResponseEntity<BaseDto>(response, HttpStatus.OK);
    }
 
-    CategoryDto toCategoryDtoNonRecursive(Category category) {
-        if (category == null)
-            return null;
-        CategoryDto categoryDto = modelMapper.map(category, CategoryDto.class);
-        categoryDto.setParent(null);
-        return categoryDto;
-    }
+
 
 }
