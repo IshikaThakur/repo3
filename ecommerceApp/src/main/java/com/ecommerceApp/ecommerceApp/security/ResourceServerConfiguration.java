@@ -73,6 +73,7 @@ private  static  final String[] AUTH_WHITELIST={
                 .antMatchers("/seller/*").hasAnyRole("SELLER")
                 .antMatchers("/doLogout").hasAnyRole("ADMIN","USER")
                 .antMatchers("categories", "category/{id}").hasAnyRole("ADMIN")
+                .antMatchers("metadata-fields").hasAnyRole("ADMIN")
 
 
                 .anyRequest().authenticated()
