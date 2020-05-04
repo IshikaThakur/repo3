@@ -45,6 +45,7 @@ public class EcommerceAppApplication {
 		bean.setValidationMessageSource(messageSource());
 		return bean;
 	}
+
 	@Bean
 	public AuditorAware<String> auditorAware() {
 		return new SpringSecurityAuditorAware();

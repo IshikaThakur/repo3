@@ -68,10 +68,12 @@ private  static  final String[] AUTH_WHITELIST={
                 .antMatchers("/seller/profile").hasAnyRole("SELLER")
                 .antMatchers("/activate/*").hasAnyRole("ADMIN")
                 .antMatchers("/forgotPassword").anonymous()
-                .antMatchers("/resetPassword/{token}").anonymous()
+                .antMatchers("/resetPassword/*").anonymous()
                 .antMatchers("/admin/*").hasAnyRole("ADMIN")
                 .antMatchers("/seller/*").hasAnyRole("SELLER")
                 .antMatchers("/doLogout").hasAnyRole("ADMIN","USER")
+                .antMatchers("categories", "category/{id}").hasAnyRole("ADMIN")
+
 
                 .anyRequest().authenticated()
                 .and()

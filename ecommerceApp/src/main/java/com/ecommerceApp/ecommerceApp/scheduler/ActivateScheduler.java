@@ -23,7 +23,7 @@ public class ActivateScheduler {
     private static final DateTimeFormatter datetimeformatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 
-    @Scheduled(fixedRate = 60000)           //for 1 min
+    @Scheduled(fixedRate = 8640000)
     public void unlockAccount() {
         List<Users> list = userRepository.findByisActive(false);
         for (Users user : list) {

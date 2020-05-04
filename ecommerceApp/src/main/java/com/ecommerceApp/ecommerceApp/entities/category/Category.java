@@ -1,23 +1,36 @@
-package com.ecommerceApp.ecommerceApp.entities;
+package com.ecommerceApp.ecommerceApp.entities.category;
+
+
+
+import com.ecommerceApp.ecommerceApp.entities.Product;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "CATEGORY")
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Product> products;
+
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "PARENT_ID")
+
+    private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Product> products;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Category> subCategories;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<CategoryMetadataFieldValues> fieldValues;
 
     public Category() {
         parentCategory = null;
@@ -26,14 +39,6 @@ public class Category {
     public Category(String name) {
         this.name = name;
         parentCategory = null;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
     }
 
     public Long getId() {
@@ -52,6 +57,22 @@ public class Category {
         this.name = name;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
     public Category getParentCategory() {
         return parentCategory;
     }
@@ -67,6 +88,15 @@ public class Category {
     public void setSubCategories(Set<Category> subCategories) {
         this.subCategories = subCategories;
     }
+
+    public Set<CategoryMetadataFieldValues> getFieldValues() {
+        return fieldValues;
+    }
+
+    public void setFieldValues(Set<CategoryMetadataFieldValues> fieldValues) {
+        this.fieldValues = fieldValues;
+    }
+
     public void addSubCategory(Category category){
         if(category != null){
             if(subCategories == null)
@@ -88,13 +118,24 @@ public class Category {
         }
     }
 
+    public void addFieldValues(CategoryMetadataFieldValues fieldValue){
+        if(fieldValue != null){
+            if(fieldValues==null)
+                fieldValues = new HashSet<>();
+
+            fieldValues.add(fieldValue);
+            fieldValue.setCategory(this);
+        }
+    }
+
     @Override
     public String toString() {
         return "Category{" +
-                "products=" + products +
+                "id=" + id +
                 ", name='" + name + '\'' +
+                ", products=" + products.size() +
                 ", parentCategory=" + parentCategory +
-                ", subCategories=" + subCategories +
+                ", subCategories=" + subCategories.size() +
                 '}';
     }
 }

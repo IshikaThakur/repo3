@@ -6,7 +6,6 @@ public class PasswordDto {
     @NotNull
     private String password;
     @NotNull
-
     private String confirmPassword;
 
     public String getPassword() {

@@ -1,5 +1,7 @@
 package com.ecommerceApp.ecommerceApp.entities;
 
+import com.ecommerceApp.ecommerceApp.entities.category.Category;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Product  {
+public class    Product  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -80,7 +80,7 @@ public class Bootstrap implements ApplicationRunner {
         System.out.println("Total users saved::" + userRepository.count());
         Product shirt = new Product("Shirt", "Check based design", "Levi's");
         shirt.setSeller(sellerRepository.findByEmail("rounakSheikh@gmail.com"));
-        //shirt.setCategory("Clothes");
+       // shirt.setCategory("Clothes");
         Product jeans = new Product("Jeans", "slim fit", "Crimson club");
         shirt.setId(100L);
         jeans.setId(101L);
