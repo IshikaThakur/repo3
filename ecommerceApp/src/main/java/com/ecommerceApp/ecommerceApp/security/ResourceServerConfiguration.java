@@ -65,15 +65,15 @@ private  static  final String[] AUTH_WHITELIST={
                 .antMatchers("/customer/*").hasAnyRole("CUSTOMER")
                 .antMatchers("/customer/home").hasAnyRole("CUSTOMER")
                 .antMatchers("/register/*").anonymous()
-                .antMatchers("/seller/profile").hasAnyRole("SELLER")
                 .antMatchers("/activate/*").hasAnyRole("ADMIN")
                 .antMatchers("/forgotPassword").anonymous()
                 .antMatchers("/resetPassword/*").anonymous()
                 .antMatchers("/admin/*").hasAnyRole("ADMIN")
-                .antMatchers("/seller/*").hasAnyRole("SELLER")
+               // .antMatchers("/seller/*").hasAnyRole("SELLER")
                 .antMatchers("/doLogout").hasAnyRole("ADMIN","USER")
                 .antMatchers("categories", "category/{id}","view/category/{id}","view/all/categories").hasAnyRole("ADMIN")
                 .antMatchers("metadata-fields").hasAnyRole("ADMIN")
+                .antMatchers("seller/product/add").hasAnyRole("SELLER","ADMIN")
 
 
                 .anyRequest().authenticated()

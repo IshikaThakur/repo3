@@ -1,10 +1,8 @@
 package com.ecommerceApp.ecommerceApp.security;
 
-import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
-import com.ecommerceApp.ecommerceApp.Repositories.RoleRepository;
-import com.ecommerceApp.ecommerceApp.Repositories.SellerRepository;
-import com.ecommerceApp.ecommerceApp.Repositories.UserRepository;
+import com.ecommerceApp.ecommerceApp.Repositories.*;
 import com.ecommerceApp.ecommerceApp.entities.*;
+import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -22,6 +20,10 @@ public class Bootstrap implements ApplicationRunner {
     ProductRepository productRepository;
     @Autowired
     SellerRepository sellerRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
+    @Autowired
+    CategoryFieldRepository categoryFieldRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -61,7 +63,7 @@ public class Bootstrap implements ApplicationRunner {
         customer1.setCredentialsNonExpired(true);
         customer1.setEnabled(true);
         customer1.setActive(true);
-        Seller seller1 = new Seller("rounakSheikh@gmail.com", "Rounak", ""
+        Seller seller1 = new Seller("rounaksheikh123@gmail.com", "Rounak", ""
                 , "Sheikh", "yfwbeu72384627", "TTN",
                 "9887123245");
         seller1.setPassword(passwordEncoder.encode("rounak@123"));
@@ -86,6 +88,16 @@ public class Bootstrap implements ApplicationRunner {
         jeans.setId(101L);
         productRepository.save(shirt);
         productRepository.save(jeans);
+
+        Category fashion = new Category("fashion");
+        Category clothing = new Category("clothing");
+        fashion.addSubCategory(clothing);
+        Category men = new Category("Men");
+        Category women = new Category("Women");
+        clothing.addSubCategory(men);
+        clothing.addSubCategory(women);
+        categoryRepository.save(fashion);
+        System.out.println("total categories saved - " + categoryRepository.count());
 
     }
 }

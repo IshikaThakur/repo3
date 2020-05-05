@@ -1,5 +1,6 @@
 package com.ecommerceApp.ecommerceApp.services;
 
+import com.ecommerceApp.ecommerceApp.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,6 +23,7 @@ public class EmailSenderService {
     {
         javaMailSender.send(email);
     }
+
    public SimpleMailMessage getCustomerAwaitingActivationMail(String customerEmail, String confirmationToken)
    {
        SimpleMailMessage mailMessage = new SimpleMailMessage();

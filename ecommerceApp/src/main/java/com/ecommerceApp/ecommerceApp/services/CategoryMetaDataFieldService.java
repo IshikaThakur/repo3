@@ -2,8 +2,6 @@ package com.ecommerceApp.ecommerceApp.services;
 
 import com.ecommerceApp.ecommerceApp.Repositories.CategoryFieldRepository;
 import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
-import com.ecommerceApp.ecommerceApp.dtos.ErrorDto;
-import com.ecommerceApp.ecommerceApp.dtos.ResponseDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryMetadataFieldDto;
 import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataField;
 import org.modelmapper.ModelMapper;
@@ -26,13 +24,15 @@ public class CategoryMetaDataFieldService {
     CategoryFieldRepository categoryFieldRepository;
     @Autowired
     ModelMapper modelMapper;
-    CategoryMetadataField toCategoryMetadataField(CategoryMetadataFieldDto categoryMetadataFieldDto){
-        if(categoryMetadataFieldDto == null)
+
+    CategoryMetadataField toCategoryMetadataField(CategoryMetadataFieldDto categoryMetadataFieldDto) {
+        if (categoryMetadataFieldDto == null)
             return null;
         return modelMapper.map(categoryMetadataFieldDto, CategoryMetadataField.class);
     }
-    public CategoryMetadataFieldDto toCategoryMetadataFieldDto(CategoryMetadataField field){
-        if(field == null)
+
+    public CategoryMetadataFieldDto toCategoryMetadataFieldDto(CategoryMetadataField field) {
+        if (field == null)
             return null;
         return modelMapper.map(field, CategoryMetadataFieldDto.class);
     }
@@ -40,7 +40,7 @@ public class CategoryMetaDataFieldService {
     public ResponseEntity addNewMetadataField(String fieldName) {
         CategoryMetadataField metafield = categoryFieldRepository.findByName(fieldName);
         BaseDto response;
-        if(metafield!=null){
+        if (metafield != null) {
             return new ResponseEntity("Invalid Entry, Field Already Exists", HttpStatus.CONFLICT);
         }
 
@@ -60,8 +60,8 @@ public class CategoryMetaDataFieldService {
         List<CategoryMetadataField> fields = categoryFieldRepository.findAll(pageable);
         List<CategoryMetadataFieldDto> responseData = new ArrayList<>();
 
-        fields.forEach((field)->{
-            CategoryMetadataFieldDto categoryMetadataFieldDto =toCategoryMetadataFieldDto(field);
+        fields.forEach((field) -> {
+            CategoryMetadataFieldDto categoryMetadataFieldDto = toCategoryMetadataFieldDto(field);
             categoryMetadataFieldDto.setValues(null);
             responseData.add(categoryMetadataFieldDto);
         });

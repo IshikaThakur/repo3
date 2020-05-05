@@ -9,11 +9,19 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ProductRepository extends CrudRepository<Product,Long> {
 
-    List<Product> findAllBySeller(Long id,Pageable pageable);
+    Product findByName(String name);
 
-    Optional<Product> findByIdAndSellerId(Long productId, Long id);
+    List<Product> findAll(Pageable pageable);
 
+    List<Product> findByBrandAndCategoryId(String brand, Long id, Pageable pageable);
+
+    List<Product> findByBrand(String brand, Pageable pageable);
+
+    Set<Product> findByBrand(Long categoryId);
+
+    List<Product> findByCategoryId(Long id, Pageable pageable);
 }
