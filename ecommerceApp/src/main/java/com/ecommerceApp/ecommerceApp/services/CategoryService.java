@@ -79,5 +79,14 @@ public CategoryDto getCategory(Long id) {
     CategoryDto categoryDto = new CategoryDto(category.getId(),category.getName());
     return categoryDto;
 }
+//=========================View All Categories=============================
+public List<CategoryDto> getAll() {
+    List<Category>categoryList = categoryRepository.findAll(PageRequest.of(0,5,
+            Sort.Direction.ASC,"id"));
+    List<CategoryDto> categoryDtoList = new ArrayList<>();
+    categoryList.forEach(categoryDto -> categoryDtoList.add(new CategoryDto(categoryDto.getId(),
+            categoryDto.getName())));
+    return categoryDtoList;
+}
 
 }
