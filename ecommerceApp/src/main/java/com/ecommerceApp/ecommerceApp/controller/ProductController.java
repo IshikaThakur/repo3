@@ -5,9 +5,7 @@ import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -21,6 +19,14 @@ public class ProductController {
         Principal principal = request.getUserPrincipal();
         String username = principal.getName();
         return productService.addProduct(username,productSellerDto);
+    }
+    @PutMapping("/product/activate/{id}")
+    public ResponseEntity<String> activateProduct(@PathVariable Long id){
+        return productService.activateProductById(id);
+    }
+    @PutMapping("/product/deactivate/{id}")
+    public ResponseEntity<String> deactivateProduct(@PathVariable Long id){
+        return productService.deactivateproductById(id);
     }
 
 }

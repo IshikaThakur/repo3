@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-public class ForgotController {
+public class ResetForgotController {
 
     @Autowired
     ForgetAndResetPasswordService forgetAndResetPasswordService;

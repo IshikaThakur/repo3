@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductService {
     @Autowired
@@ -93,5 +95,40 @@ public class ProductService {
         return new ResponseEntity<>("Success", HttpStatus.OK);
 
     }
+//==================API to activate a product==============
+public ResponseEntity<String> activateProductById(Long id) {
+    Optional<Product> savedproduct = productRepository.findById(id);
+    if (!savedproduct.isPresent())
+        return new ResponseEntity<>("Product not present", HttpStatus.NOT_FOUND);
+    Product product = savedproduct.get();
+    if (product.isActive())
+        return new ResponseEntity<>("Product already activated", HttpStatus.BAD_REQUEST);
+    product.setActive(true);
+    String email = product.getSeller().getEmail();
+    SimpleMailMessage mailMessage=new SimpleMailMessage();
+    mailMessage.setTo(email);
+    mailMessage.setSubject("Product is activated");
+    mailMessage.setFrom("tanu.thakur0816@gmail.com");
+    productRepository.save(product);
+    return new ResponseEntity<>("Success", HttpStatus.OK);
 
+}
+//=====================API to deactivate a product====================
+public ResponseEntity<String> deactivateproductById(Long id) {
+    Optional<Product> savedProduct = productRepository.findById(id);
+    if (!savedProduct.isPresent())
+        return new ResponseEntity<>("Invalid operation", HttpStatus.BAD_REQUEST);
+    Product product = savedProduct.get();
+    if (!product.isActive())
+        return new ResponseEntity<>("Already inactive", HttpStatus.BAD_REQUEST);
+    product.setActive(false);
+    productRepository.save(product);
+    String email = product.getSeller().getEmail();
+    SimpleMailMessage mailMessage=new SimpleMailMessage();
+    mailMessage.setTo(email);
+    mailMessage.setSubject("Product is deactivated");
+    mailMessage.setFrom("tanu.thakur0816@gmail.com");
+    return new ResponseEntity<>("Success", HttpStatus.OK);
+
+}
 }
