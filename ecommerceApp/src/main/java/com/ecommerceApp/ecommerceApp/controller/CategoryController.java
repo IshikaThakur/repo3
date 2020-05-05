@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -45,5 +46,12 @@ public class CategoryController {
 
 
     }
+    //==============API to View a Category================================
+  @GetMapping("/view/category/{id}")
+    public CategoryDto viewCategory(@PathVariable Long id, HttpServletRequest httpServletRequest)
+  {
+     return categoryService.getCategory(id);
+  }
+
 
 }

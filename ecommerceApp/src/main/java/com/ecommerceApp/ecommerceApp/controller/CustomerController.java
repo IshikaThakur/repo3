@@ -17,7 +17,7 @@ import java.util.Set;
 public class CustomerController {
     @Autowired
     CustomerService customerService;
-@ApiOperation(value = "shows customer profile",notes="shows the profile for the logged in customer")
+    @ApiOperation(value = "shows customer profile",notes="shows the profile for the logged in customer")
         @GetMapping("/customer/view/profile")
             public CustomerViewProfileDto getprofile(HttpServletRequest request){
         Principal principal = request.getUserPrincipal();

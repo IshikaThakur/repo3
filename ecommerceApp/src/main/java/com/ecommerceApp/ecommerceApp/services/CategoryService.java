@@ -70,6 +70,14 @@ public class CategoryService {
        return new ResponseEntity<BaseDto>(response, HttpStatus.OK);
    }
 
-
+//======================View a Category======================
+public CategoryDto getCategory(Long id) {
+    if (!categoryRepository.findById(id).isPresent()) {
+        throw new InvalidDetailException("entered category Id is invalid");
+    }
+    Category category = categoryRepository.findById(id).get();
+    CategoryDto categoryDto = new CategoryDto(category.getId(),category.getName());
+    return categoryDto;
+}
 
 }

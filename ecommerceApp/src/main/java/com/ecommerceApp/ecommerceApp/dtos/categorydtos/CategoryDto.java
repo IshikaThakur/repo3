@@ -15,6 +15,11 @@ public class CategoryDto {
         this.name = name;
         this.parent = parent;
     }
+public CategoryDto(Long id,String name)
+{
+    this.id=id;
+    this.name=name;
+}
 
     public Long getId() {
         return id;

@@ -41,6 +41,7 @@ public class Category {
         parentCategory = null;
     }
 
+
     public Long getId() {
         return id;
     }
