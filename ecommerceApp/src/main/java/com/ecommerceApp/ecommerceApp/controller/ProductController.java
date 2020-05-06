@@ -43,13 +43,19 @@ public class ProductController {
     public ResponseEntity<String> getProductById(@PathVariable Long productId){
         return productService.getProductById(productId);
     }
-    
+
     //================API to get a product for seller=========
     @GetMapping("/seller/product/{id}")
     public ProductSellerDto getProductForSeller(@PathVariable Long id, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         String email = principal.getName();
         return productService.getProductByIdForSeller(id, email);
+    }
+    //=========Updation of product seller===============================
+    @PostMapping("/seller/product/update/{productId}")
+    public String updateProductAsSeller(@PathVariable Long productId, @RequestBody ProductSellerDto productSellerDto) {
+        productService.updateProduct(productId,productSellerDto);
+        return "product updated successfully";
     }
 
 }

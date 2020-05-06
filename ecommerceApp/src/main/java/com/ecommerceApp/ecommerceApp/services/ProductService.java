@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -230,5 +231,29 @@ public ResponseEntity<String>getProductById(Long id)
         ProductSellerDto productSellerDto = toProductSellerDto(product);
         productSellerDto.setCategoryDto(toCategoryDto(product.getCategory()));
         return productSellerDto;
+    }
+//===================API to update a product=====================
+    public void updateProduct(Long productId, ProductSellerDto productSellerDto) {
+        Seller seller = sellerService.getLoggedInSeller();
+        Optional<Product> product = productRepository.findById(productId);
+        if(!product.isPresent())
+            throw new ProductNotFoundException("Product does not exist");
+
+        if (productSellerDto.getBrand() != null)
+            product.get().setBrand(productSellerDto.getBrand());
+        if (productSellerDto.getDescription() != null)
+            product.get().setDescription(productSellerDto.getDescription());
+        if (productSellerDto.getName() != null)
+            product.get().setName(productSellerDto.getName());
+        Product product1 = product.get();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setTo(seller.getEmail());
+        mailMessage.setSubject("Product Updated");
+        mailMessage.setFrom("tanu.thakur0816@gmail.com");
+        emailSenderService.sendEmail(mailMessage);
+        productRepository.save(product1);
+
+
     }
 }

@@ -73,7 +73,7 @@ private  static  final String[] AUTH_WHITELIST={
                 .antMatchers("/doLogout").hasAnyRole("ADMIN","USER")
                 .antMatchers("categories", "category/{id}","view/category/{id}","view/all/categories").hasAnyRole("ADMIN")
                 .antMatchers("metadata-fields").hasAnyRole("ADMIN")
-                .antMatchers("seller/product/add","seller/product/{id}").hasAnyRole("SELLER")
+                .antMatchers("seller/product/add","seller/product/{id}","seller/product/update/{productId}").hasAnyRole("SELLER")
                 .antMatchers("product/activate/{id}","product/deactivate/{id}").hasAnyRole("ADMIN")
 
 
