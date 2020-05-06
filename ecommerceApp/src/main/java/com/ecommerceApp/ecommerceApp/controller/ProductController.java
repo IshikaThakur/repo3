@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -41,6 +42,14 @@ public class ProductController {
     @GetMapping("/admin/product/{productId}")
     public ResponseEntity<String> getProductById(@PathVariable Long productId){
         return productService.getProductById(productId);
+    }
+    
+    //================API to get a product for seller=========
+    @GetMapping("/seller/product/{id}")
+    public ProductSellerDto getProductForSeller(@PathVariable Long id, HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        String email = principal.getName();
+        return productService.getProductByIdForSeller(id, email);
     }
 
 }

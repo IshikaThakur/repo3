@@ -11,15 +11,21 @@ import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
+import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -183,4 +189,46 @@ public ResponseEntity<String>getProductById(Long id)
     return new ResponseEntity(productAdminDto,HttpStatus.OK);
 
 }
+//===========================API to view all products by admin==================
+    public ResponseEntity<List> getAllProducts(Long categoryId, String offset, String size, String sortByField, String order, String brand)
+    {
+        Integer pageNo=Integer.parseInt(offset);
+        Integer pageSize=Integer.parseInt(size);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(String.valueOf(sortByField)).ascending());
+        List<Product> products;
+        if (categoryId != null && brand != null) {
+            products = productRepository.findByBrandAndCategoryId(brand, categoryId, pageable);
+        } else if (categoryId != null) {
+            products = productRepository.findByCategoryId(categoryId, pageable);
+        } else if (brand != null) {
+            products = productRepository.findByBrand(brand, pageable);
+        } else {
+            products = productRepository.findAll(pageable);
+        }
+        List<ProductAdminDto> productDtos = new ArrayList<>();
+        products.forEach(product -> {
+            ProductAdminDto productAdminDto = toProductAdminDto(product);
+           productAdminDto.setCategoryDto(toCategoryDto(product.getCategory()));
+            productDtos.add(productAdminDto);
+        });
+        return new ResponseEntity(productDtos, HttpStatus.OK);
+
+    }
+    //===============View Product for seller==========
+    public ProductSellerDto getProductByIdForSeller(Long id, String email) {
+        String message;
+
+        Optional<Product> savedProduct = productRepository.findById(id);
+        Product product = savedProduct.get();
+        if (!product.getSeller().getEmail().equalsIgnoreCase(email)) {
+            throw new ProductDoesNotExistsException("Product does not exist");
+        }
+        if (product.isDeleted()) {
+            throw new ProductDoesNotExistsException("product has already been deleted");
+        }
+
+        ProductSellerDto productSellerDto = toProductSellerDto(product);
+        productSellerDto.setCategoryDto(toCategoryDto(product.getCategory()));
+        return productSellerDto;
+    }
 }
