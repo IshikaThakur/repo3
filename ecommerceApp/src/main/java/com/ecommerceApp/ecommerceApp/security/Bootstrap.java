@@ -86,6 +86,7 @@ public class Bootstrap implements ApplicationRunner {
         Product jeans = new Product("Jeans", "slim fit", "Crimson club");
         shirt.setId(100L);
         jeans.setId(101L);
+      //  shirt.setSeller(sellerRepository.findByEmail(seller1));
         productRepository.save(shirt);
         productRepository.save(jeans);
 

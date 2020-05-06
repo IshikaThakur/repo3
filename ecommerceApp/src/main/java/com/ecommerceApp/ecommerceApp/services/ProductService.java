@@ -4,12 +4,15 @@ import com.ecommerceApp.ecommerceApp.Repositories.CategoryRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.CustomerRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.SellerRepository;
+import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductCustomerDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
+import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
+import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +74,14 @@ public class ProductService {
             return null;
         return modelMapper.map(product, ProductAdminDto.class);
     }
+    public CategoryDto toCategoryDto(Category category){
+        if(category == null)
+            return null;
+        CategoryDto categoryDto =modelMapper.map(category,CategoryDto.class);
+        CategoryDto parentDto = toCategoryDto(category.getParentCategory());
+        categoryDto.setParent(parentDto);
+        return categoryDto;
+    }
   //====================API to add a new product=================================
     public ResponseEntity<String> addProduct(String email, ProductSellerDto productSellerDto) {
 
@@ -129,6 +140,47 @@ public ResponseEntity<String> deactivateproductById(Long id) {
     mailMessage.setSubject("Product is deactivated");
     mailMessage.setFrom("tanu.thakur0816@gmail.com");
     return new ResponseEntity<>("Success", HttpStatus.OK);
+
+}
+
+//===============API to deelte a product===========
+public ResponseEntity<String> deleteProductById(Long id, String email) {
+    String message;
+    Optional<Product> savedProduct = productRepository.findById(id);
+    if(!savedProduct.isPresent()){
+        return new ResponseEntity<>("Product with the given id not found", HttpStatus.NOT_FOUND);
+    }
+    Product product = savedProduct.get();
+    if(!product.getSeller().getEmail().equalsIgnoreCase(email)){
+        return new ResponseEntity<>("Unauthorized", HttpStatus.BAD_REQUEST);
+    }
+    if(product.isDeleted()){
+        return new ResponseEntity<>("Product does not exist", HttpStatus.NOT_FOUND);
+    }
+    productRepository.deleteById(id);
+    return new ResponseEntity<>("deleted", HttpStatus.OK);
+}
+//===================API to view a product by admin========================
+public ResponseEntity<String>getProductById(Long id)
+{
+
+    Optional<Product>savedProduct=productRepository.findById(id);
+    if(!savedProduct.isPresent())
+    {
+        throw new ProductNotFoundException("Product does not exists");
+    }
+    Product product=savedProduct.get();
+    if (product.isDeleted())
+    {
+        throw new ProductNotFoundException("Product does not exists");
+    }
+    if (!product.isActive())
+    {
+        throw new ProductNotActiveException("Product is  not active");
+    }
+    ProductAdminDto productAdminDto=toProductAdminDto(product);
+    productAdminDto.setCategoryDto(toCategoryDto(product.getCategory()));
+    return new ResponseEntity(productAdminDto,HttpStatus.OK);
 
 }
 }
