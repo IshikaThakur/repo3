@@ -1,6 +1,6 @@
 package com.ecommerceApp.ecommerceApp.services;
 
-import com.ecommerceApp.ecommerceApp.Repositories.CategoryFieldRepository;
+import com.ecommerceApp.ecommerceApp.Repositories.CategoryMetadataFieldRepository;
 import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryMetadataFieldDto;
 import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataField;
@@ -21,7 +21,7 @@ public class CategoryMetaDataFieldService {
     @Autowired
     CategoryService categoryService;
     @Autowired
-    CategoryFieldRepository categoryFieldRepository;
+    CategoryMetadataFieldRepository categoryFieldRepository;
     @Autowired
     ModelMapper modelMapper;
 

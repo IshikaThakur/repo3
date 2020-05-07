@@ -23,7 +23,7 @@ public class Bootstrap implements ApplicationRunner {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
-    CategoryFieldRepository categoryFieldRepository;
+    CategoryMetadataFieldRepository categoryFieldRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

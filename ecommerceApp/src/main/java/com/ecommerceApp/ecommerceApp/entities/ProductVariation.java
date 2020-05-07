@@ -8,7 +8,7 @@ public class ProductVariation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer quantityAvailable;
+    private Integer quantity;
     private Double price;
     private String primaryImageName;
     private String metadata;
@@ -21,8 +21,8 @@ public class ProductVariation {
     public ProductVariation() {
     }
 
-    public ProductVariation(Integer quantityAvailable, Double price) {
-        this.quantityAvailable = quantityAvailable;
+    public ProductVariation(Integer quantity, Double price) {
+        this.quantity = quantity;
         this.price = price;
     }
 
@@ -35,11 +35,11 @@ public class ProductVariation {
     }
 
     public Integer getQuantityAvailable() {
-        return quantityAvailable;
+        return quantity;
     }
 
     public void setQuantityAvailable(Integer quantityAvailable) {
-        this.quantityAvailable = quantityAvailable;
+        this.quantity = quantity;
     }
 
     public Double getPrice() {
@@ -77,7 +77,7 @@ public class ProductVariation {
     @Override
     public String toString() {
         return "ProductVariation{" +
-                "quantityAvailable=" + quantityAvailable +
+                "quantityAvailable=" + quantity +
                 ", price=" + price +
                 ", primaryImageName='" + primaryImageName + '\'' +
                 ", metadata='" + metadata + '\'' +

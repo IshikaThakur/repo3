@@ -1,6 +1,7 @@
 package com.ecommerceApp.ecommerceApp.services;
 
-import com.ecommerceApp.ecommerceApp.Repositories.CategoryFieldRepository;
+import com.ecommerceApp.ecommerceApp.Repositories.CategoryMetadataFieldRepository;
+import com.ecommerceApp.ecommerceApp.Repositories.CategoryMetadaFieldValuesRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.CategoryRepository;
 import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
 import com.ecommerceApp.ecommerceApp.dtos.ErrorDto;
@@ -9,7 +10,6 @@ import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.exceptions.CategoryAlreadyRegisteredException;
 import com.ecommerceApp.ecommerceApp.exceptions.InvalidDetailException;
-import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +27,9 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
-    CategoryFieldRepository categoryFieldRepository;
+    CategoryMetadataFieldRepository categoryFieldRepository;
+    @Autowired
+    CategoryMetadaFieldValuesRepository categoryMetadaFieldRepository;
     @Autowired
     ModelMapper modelMapper;
     //=============================Adding new Category================================
@@ -81,12 +83,14 @@ public CategoryDto getCategory(Long id) {
 }
 //=========================View All Categories=============================
 public List<CategoryDto> getAll() {
-    List<Category>categoryList = categoryRepository.findAll(PageRequest.of(0,5,
-            Sort.Direction.ASC,"id"));
+    List<Category> categoryList = categoryRepository.findAll(PageRequest.of(0, 5,
+            Sort.Direction.ASC, "id"));
     List<CategoryDto> categoryDtoList = new ArrayList<>();
     categoryList.forEach(categoryDto -> categoryDtoList.add(new CategoryDto(categoryDto.getId(),
             categoryDto.getName())));
     return categoryDtoList;
 }
+    //==============API to add new metadatafield==============================
+
 
 }
