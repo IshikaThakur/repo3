@@ -3,12 +3,17 @@ package com.ecommerceApp.ecommerceApp.security;
 import com.ecommerceApp.ecommerceApp.Repositories.*;
 import com.ecommerceApp.ecommerceApp.entities.*;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
+import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataField;
+import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataFieldValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class Bootstrap implements ApplicationRunner {
@@ -24,6 +29,8 @@ public class Bootstrap implements ApplicationRunner {
     CategoryRepository categoryRepository;
     @Autowired
     CategoryMetadataFieldRepository categoryFieldRepository;
+    @Autowired
+    CategoryMetadaFieldValuesRepository categoryMetadaFieldValuesRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -82,13 +89,12 @@ public class Bootstrap implements ApplicationRunner {
         System.out.println("Total users saved::" + userRepository.count());
         Product shirt = new Product("Shirt", "Check based design", "Levi's");
         shirt.setSeller(sellerRepository.findByEmail("rounakSheikh@gmail.com"));
-       // shirt.setCategory("Clothes");
-        Product jeans = new Product("Jeans", "slim fit", "Crimson club");
+        Product jeans = new Product("Jeans", "Narrow bottom", "Buffalo");
         shirt.setId(100L);
         jeans.setId(101L);
-      //  shirt.setSeller(sellerRepository.findByEmail(seller1));
-        productRepository.save(shirt);
-        productRepository.save(jeans);
+        seller1.addProduct(shirt);
+        seller1.addProduct(jeans);
+
 
         Category fashion = new Category("fashion");
         Category clothing = new Category("clothing");
@@ -98,7 +104,15 @@ public class Bootstrap implements ApplicationRunner {
         clothing.addSubCategory(men);
         clothing.addSubCategory(women);
         categoryRepository.save(fashion);
+        productRepository.save(shirt);
+        productRepository.save(jeans);
+
         System.out.println("total categories saved - " + categoryRepository.count());
+
+
+
+
+
 
     }
 }

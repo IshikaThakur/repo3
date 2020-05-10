@@ -1,6 +1,7 @@
 package com.ecommerceApp.ecommerceApp.controller;
 
 import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
+import com.ecommerceApp.ecommerceApp.dtos.CategoryFilterDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.services.CategoryMetaDataFieldService;
@@ -60,6 +61,10 @@ public class CategoryController {
     {
      return  categoryService.getAll();
     }
-
+//=================API to filtering details
+@GetMapping("/customer/filtering/{id}")
+public CategoryFilterDto getFilteringDetails(@PathVariable Long id) {
+    return categoryService.getFilteringDetails(id);
+}
 
 }

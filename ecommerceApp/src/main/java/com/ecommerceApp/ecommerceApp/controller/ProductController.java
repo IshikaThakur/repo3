@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 public class ProductController {
@@ -16,7 +16,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/seller/product/add")
-    public ResponseEntity<String> createProduct(@RequestBody ProductSellerDto productSellerDto, HttpServletRequest request) {
+    public ResponseEntity<String> createProduct(@Valid  @RequestBody ProductSellerDto productSellerDto, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         String username = principal.getName();
         return productService.addProduct(username, productSellerDto);

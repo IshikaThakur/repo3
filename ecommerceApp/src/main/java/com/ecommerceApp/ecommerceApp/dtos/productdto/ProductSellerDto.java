@@ -4,19 +4,23 @@ package com.ecommerceApp.ecommerceApp.dtos.productdto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductSellerDto {
     private Long id;
 
     @NotNull
+    @NotEmpty(message = "Name cant be empty")
     private String name;
 
     @NotNull
+    @NotEmpty
     private String brand;
 
     @NotNull
+
     private Long categoryId;
 
     private CategoryDto categoryDto;

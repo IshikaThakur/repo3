@@ -95,15 +95,22 @@ public class SellerService {
     }
 
     public String registerSeller(SellerRegistrationDto sellerRegistrationDto) {
-      //  if (!(check_if_all_details_unique(sellerRegistrationDto) == "unique"))
-        //  {
-         //   return "Invalid data";
-      //  }
-        Seller seller = toSeller(sellerRegistrationDto);
+       if (!(check_if_all_details_unique(sellerRegistrationDto) == "unique"))
+         {
+            return "Invalid data";
+        }
+       if (!sellerRegistrationDto.getPassword().equals(sellerRegistrationDto.getConfirmPassword())) {
+
+               return "Password Mismatch";
+           }
+
+
+
+           Seller seller = toSeller(sellerRegistrationDto);
         seller.setPassword(passwordEncoder.encode(seller.getPassword()));
         sellerRepository.save(seller);
         acknowledgementEmail(seller.getEmail());
-        return "Account created successfully. It will be activated after verification.";
+        return "Account created successfully.";
 
     }
 

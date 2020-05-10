@@ -16,12 +16,13 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        /* Optional<String>currentUser=Optional.empty();
+        /*Optional<String>currentUser=Optional.empty();
          String principal=userService.getCurrentLoggedInUser();
          currentUser=Optional.of(principal);
         return currentUser;
      }*/
-        return Optional.ofNullable("Kindson").filter(s -> !s.isEmpty());
+        return Optional.ofNullable("Ishika").filter(s -> !s.isEmpty());
+
     }
 
 }

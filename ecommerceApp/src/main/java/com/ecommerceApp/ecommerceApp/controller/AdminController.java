@@ -48,7 +48,7 @@ public class AdminController {
     }
 
     @PutMapping("/admin/activate/{id}")
-    public String activateUser(@PathVariable Long id, @RequestBody CustomerDto customerDto, WebRequest webRequest) {
+    public String activateUser(@PathVariable Long id, WebRequest webRequest) {
         return activation_deactivation_service.ActivateUser(id, webRequest);
     }
 

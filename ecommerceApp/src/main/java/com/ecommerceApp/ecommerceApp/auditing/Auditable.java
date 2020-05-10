@@ -26,7 +26,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 
         @CreatedDate
         @Temporal(TemporalType.TIMESTAMP)
-        protected Date createdDate;
+        private Date createdDate;
 
         @LastModifiedBy
         protected U lastModifiedBy;

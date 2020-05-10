@@ -19,5 +19,13 @@ public interface CategoryRepository extends CrudRepository<Category,Long> {
 
     @Query(value = "delete from category_metadata_field_values where category_id = :Id", nativeQuery = true)
     void deleteCategoryById(@Param("Id") Long Id);
+    //===============================================
+
+    @Query(value = "select exists(select * from category where parent_id=:parent_id)",nativeQuery = true)
+    int checkIfLeaf(@Param("parent_id") Long parent_id);
+
+
 }
+
+
 

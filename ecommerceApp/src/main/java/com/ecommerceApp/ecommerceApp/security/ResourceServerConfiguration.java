@@ -70,7 +70,7 @@ private  static  final String[] AUTH_WHITELIST={
                 .antMatchers("/resetPassword/*").anonymous()
                 .antMatchers("/admin/*").hasAnyRole("ADMIN")
                // .antMatchers("/seller/*").hasAnyRole("SELLER")
-                .antMatchers("/doLogout").hasAnyRole("ADMIN","USER")
+                .antMatchers("/doLogout").permitAll()
                 .antMatchers("categories", "category/{id}","view/category/{id}","view/all/categories").hasAnyRole("ADMIN")
                 .antMatchers("metadata-fields").hasAnyRole("ADMIN")
                 .antMatchers("seller/product/add","seller/product/{id}","seller/product/update/{productId}").hasAnyRole("SELLER")

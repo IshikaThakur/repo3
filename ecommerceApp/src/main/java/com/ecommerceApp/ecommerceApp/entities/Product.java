@@ -1,5 +1,6 @@
 package com.ecommerceApp.ecommerceApp.entities;
 
+import com.ecommerceApp.ecommerceApp.auditing.Auditable;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class    Product  {
+public class Product  extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,28 +1,53 @@
 package com.ecommerceApp.ecommerceApp.entities;
 
+import com.ecommerceApp.ecommerceApp.services.HashMapConverter;
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 
 @Entity
 public class ProductVariation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Integer quantity;
+
+    private Integer quantityAvailable;
     private Double price;
     private String primaryImageName;
-    private String metadata;
+
+    ProductVariation(Long id,Integer quantityAvailable,Double price,String primaryImageName)
+    {
+        this.id=id;
+        this.quantityAvailable=quantityAvailable;
+        this.price=price;
+        this.primaryImageName=primaryImageName;
+    }
 
 
-    @ManyToOne
+    @Convert(converter = HashMapConverter.class)
+    private Map<String, String> productAttributes;
+
+    private boolean isDeleted = false;
+    private boolean isActive = true;
+
+   ProductVariation()
+   {
+
+   }
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductVariation() {
-    }
 
-    public ProductVariation(Integer quantity, Double price) {
-        this.quantity = quantity;
+    @OneToMany(mappedBy = "productVariation", fetch = FetchType.EAGER)
+    private Set<OrderProduct> orderedProducts;
+
+
+    public ProductVariation(Integer quantityAvailable, Double price) {
+        this.quantityAvailable = quantityAvailable;
         this.price = price;
     }
 
@@ -34,12 +59,28 @@ public class ProductVariation {
         this.id = id;
     }
 
-    public Integer getQuantityAvailable() {
-        return quantity;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setQuantityAvailable(Integer quantityAvailable) {
-        this.quantity = quantity;
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Set<OrderProduct> getOrderedProducts() {
+        return orderedProducts;
+    }
+
+    public void setOrderedProducts(Set<OrderProduct> orderedProducts) {
+        this.orderedProducts = orderedProducts;
     }
 
     public Double getPrice() {
@@ -58,14 +99,6 @@ public class ProductVariation {
         this.primaryImageName = primaryImageName;
     }
 
-    public String getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(String metadata) {
-        this.metadata = metadata;
-    }
-
     public Product getProduct() {
         return product;
     }
@@ -74,14 +107,40 @@ public class ProductVariation {
         this.product = product;
     }
 
+    public Map<String, String> getProductAttributes() {
+        return productAttributes;
+    }
+
+    public void setProductAttributes(Map<String, String> productAttributes) {
+        this.productAttributes = productAttributes;
+    }
+
+    public Integer getQuantityAvailable() {
+        return quantityAvailable;
+    }
+
+    public void setQuantityAvailable(Integer quantityAvailable) {
+        this.quantityAvailable = quantityAvailable;
+    }
+
     @Override
     public String toString() {
         return "ProductVariation{" +
-                "quantityAvailable=" + quantity +
+                "id=" + id +
+                ", quantityAvailable=" + quantityAvailable +
                 ", price=" + price +
                 ", primaryImageName='" + primaryImageName + '\'' +
-                ", metadata='" + metadata + '\'' +
-                ", product=" + product +
+                ", productAttributes=" + productAttributes +
+                ", isDeleted=" + isDeleted +
                 '}';
+    }
+
+
+    public void addOrderProduct(OrderProduct orderProduct){
+        if(orderProduct != null){
+            if(orderedProducts == null)
+                orderedProducts = new LinkedHashSet<>();
+            orderedProducts.add(orderProduct);
+        }
     }
 }

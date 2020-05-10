@@ -4,9 +4,7 @@ import com.ecommerceApp.ecommerceApp.Repositories.CategoryRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.CustomerRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.SellerRepository;
-import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
-import com.ecommerceApp.ecommerceApp.dtos.ErrorDto;
-import com.ecommerceApp.ecommerceApp.dtos.ResponseDto;
+import com.ecommerceApp.ecommerceApp.dtos.*;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductCustomerDto;
@@ -19,6 +17,8 @@ import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,13 +27,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
 public class ProductService {
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    CategoryService categoryService;
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
@@ -48,6 +49,9 @@ public class ProductService {
     SellerService sellerService;
     @Autowired
     CustomerService customerService;
+    @Autowired
+    MessageSource messageSource;
+
 
     public Product toProduct(ProductSellerDto productSellerDto) {
         if (productSellerDto == null)
@@ -96,6 +100,7 @@ public class ProductService {
 
     //====================API to add a new product=================================
     public ResponseEntity<String> addProduct(String email, ProductSellerDto productSellerDto) {
+        ResponseEntity<String> responseEntity;
 
         Category category = categoryRepository.findById(productSellerDto.getCategoryId()).get();
         Seller seller = sellerRepository.findByEmail(email);
@@ -115,12 +120,16 @@ public class ProductService {
 
         emailSenderService.sendEmail(mailMessage);
         productRepository.save(product);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        //return new ResponseEntity<>("Success", HttpStatus.OK);
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-product-added", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
 
     }
 
     //==================API to activate a product==============
     public ResponseEntity<String> activateProductById(Long id) {
+        ResponseEntity<String> responseEntity;
         Optional<Product> savedproduct = productRepository.findById(id);
         if (!savedproduct.isPresent())
             return new ResponseEntity<>("Product not present", HttpStatus.NOT_FOUND);
@@ -134,12 +143,17 @@ public class ProductService {
         mailMessage.setSubject("Product is activated");
         mailMessage.setFrom("tanu.thakur0816@gmail.com");
         productRepository.save(product);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        //return new ResponseEntity<>( HttpStatus.OK);
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-product-activated", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+
 
     }
 
     //=====================API to deactivate a product====================
     public ResponseEntity<String> deactivateproductById(Long id) {
+        ResponseEntity<String> responseEntity;
         Optional<Product> savedProduct = productRepository.findById(id);
         if (!savedProduct.isPresent())
             return new ResponseEntity<>("Invalid operation", HttpStatus.BAD_REQUEST);
@@ -153,12 +167,16 @@ public class ProductService {
         mailMessage.setTo(email);
         mailMessage.setSubject("Product is deactivated");
         mailMessage.setFrom("tanu.thakur0816@gmail.com");
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        // return new ResponseEntity<>("Success", HttpStatus.OK);
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-product-deactivated", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
 
     }
 
     //===============API to deelte a product===========
     public ResponseEntity<String> deleteProductById(Long id, String email) {
+        ResponseEntity<String> responseEntity;
         String message;
         Optional<Product> savedProduct = productRepository.findById(id);
         if (!savedProduct.isPresent()) {
@@ -171,13 +189,17 @@ public class ProductService {
         if (product.isDeleted()) {
             return new ResponseEntity<>("Product does not exist", HttpStatus.NOT_FOUND);
         }
-        productRepository.deleteById(id);
-        return new ResponseEntity<>("deleted", HttpStatus.OK);
+        //productRepository.deleteById(id);
+        productRepository.deleteProductById(id);
+        //return new ResponseEntity<>("deleted", HttpStatus.OK);
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-product-deleted", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+
     }
 
     //===================API to view a product by admin========================
     public ResponseEntity<String> getProductById(Long id) {
-
         Optional<Product> savedProduct = productRepository.findById(id);
         if (!savedProduct.isPresent()) {
             throw new ProductNotFoundException("Product does not exists");
@@ -192,6 +214,7 @@ public class ProductService {
         ProductAdminDto productAdminDto = toProductAdminDto(product);
         productAdminDto.setCategoryDto(toCategoryDto(product.getCategory()));
         return new ResponseEntity(productAdminDto, HttpStatus.OK);
+
 
     }
 
@@ -218,6 +241,7 @@ public class ProductService {
         });
         return new ResponseEntity(productDtos, HttpStatus.OK);
 
+
     }
 
     //===============View Product for seller==========
@@ -239,7 +263,9 @@ public class ProductService {
     }
 
     //===================API to update a product=====================
-    public void updateProduct(Long productId, ProductSellerDto productSellerDto) {
+    public ResponseEntity<String> updateProduct(Long productId, ProductSellerDto productSellerDto) {
+        ResponseEntity<String> responseEntity;
+
         Seller seller = sellerService.getLoggedInSeller();
         Optional<Product> product = productRepository.findById(productId);
         if (!product.isPresent())
@@ -259,8 +285,13 @@ public class ProductService {
         mailMessage.setFrom("tanu.thakur0816@gmail.com");
         emailSenderService.sendEmail(mailMessage);
         productRepository.save(product1);
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
+                ("message-product-updated", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
 
 
     }
-    //==================API to view similar product=================
-}
+
+    }
+
+

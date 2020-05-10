@@ -1,22 +1,29 @@
 package com.ecommerceApp.ecommerceApp.dtos;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class AddressDto {
     @NotNull
+    @NotEmpty
     private String addressLine;
     @NotNull
+    @NotEmpty
     private String city;
     @NotNull
+    @NotEmpty
     private String state;
 
     @NotNull
+    @NotEmpty
     @Size(min = 6, max = 6, message = "Zipcode should be of length 6")
     private String zipCode;
     @NotNull
+    @NotEmpty
     private String country;
     @NotNull
+    @NotEmpty
     private String label;
 
     public String getAddressLine() {
