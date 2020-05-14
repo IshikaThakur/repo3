@@ -62,7 +62,7 @@ public class CustomEventListener
         {
             UserAttempts userAttempts1 = new UserAttempts();
             Users user = userRepository.findByEmail(username);
-            userAttempts1.setEmail(user.getEmail());
+          //  userAttempts1.setEmail(user.getEmail());
             userAttempts1.setAttempts(1);
             userAttemptsRepository.save(userAttempts1);
         }

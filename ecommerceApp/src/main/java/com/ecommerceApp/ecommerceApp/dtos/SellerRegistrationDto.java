@@ -14,6 +14,7 @@ public class SellerRegistrationDto extends UserRegistrationDto {
     private String GST;
 
     @NotNull
+    @NotEmpty
     private String companyName;
 
     @Size(min = 10, max = 10)

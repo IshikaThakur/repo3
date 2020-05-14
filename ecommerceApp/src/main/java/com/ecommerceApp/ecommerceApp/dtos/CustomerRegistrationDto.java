@@ -1,4 +1,5 @@
 package com.ecommerceApp.ecommerceApp.dtos;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -6,6 +7,7 @@ public class CustomerRegistrationDto extends UserRegistrationDto {
 
     @Pattern(regexp = "^[789]\\d{9}$", message = "Please enter a valid number!")
     @NotNull
+    @NotEmpty
     private String contact;
 
     public String getContact() {

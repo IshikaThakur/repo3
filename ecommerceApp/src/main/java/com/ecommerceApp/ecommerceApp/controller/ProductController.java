@@ -57,5 +57,33 @@ public class ProductController {
         productService.updateProduct(productId,productSellerDto);
         return "product updated successfully";
     }
+    //===============Get all products for seller=================
+    @GetMapping("/seller/products")
+    public ResponseEntity getAllProductsForSeller(@RequestParam(defaultValue = "0") String offset,
+                                                          @RequestParam(defaultValue = "10") String size,
+                                                          @RequestParam(defaultValue = "id") String sortByField,
+                                                          @RequestParam(defaultValue = "ascending") String order,
+                                                          @RequestParam(required = false) Long categoryId,
+                                                          @RequestParam(required = false) String brand){
+        return productService.getAllProductsForSeller(offset, size, sortByField, order, categoryId, brand);
+    }
+    @GetMapping("/products")
+    public ResponseEntity getProductByIdForAdmin(@RequestParam(defaultValue = "0") String offset,
+                                                         @RequestParam(defaultValue = "10") String size,
+                                                         @RequestParam(defaultValue = "id") String sortByField,
+                                                         @RequestParam(defaultValue = "ascending") String order,
+                                                         @RequestParam(required = false) Long categoryId,
+                                                         @RequestParam(required = false) String brand){
+        return productService.getAllProductsForAdmin(categoryId, offset, size, sortByField, order, brand);
+    }
+   /* @GetMapping("/customer/similar-products/{productId}")
+    public ResponseEntity getSimilarProductsByProductIdForCustomer(@PathVariable Long productId,
+                                                                           @RequestParam(defaultValue = "0") String offset,
+                                                                           @RequestParam(defaultValue = "10") String size,
+                                                                           @RequestParam(defaultValue = "id") String sortByField,
+                                                                           @RequestParam(defaultValue = "ascending") String order){
+
+        return productService.getAllSimilarProductsByProductId(productId, offset, size, sortByField, order);
+    }*/
 
 }

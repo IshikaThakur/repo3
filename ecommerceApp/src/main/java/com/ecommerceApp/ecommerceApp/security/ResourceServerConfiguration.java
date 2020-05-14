@@ -71,10 +71,10 @@ private  static  final String[] AUTH_WHITELIST={
                 .antMatchers("/admin/*").hasAnyRole("ADMIN")
                // .antMatchers("/seller/*").hasAnyRole("SELLER")
                 .antMatchers("/doLogout").permitAll()
-                .antMatchers("categories", "category/{id}","view/category/{id}","view/all/categories").hasAnyRole("ADMIN")
-                .antMatchers("metadata-fields").hasAnyRole("ADMIN")
+                .antMatchers("/categories", "category/{id}","view/category/{id}","view/all/categories").hasAnyRole("ADMIN")
+                //.antMatchers("/metadata-fields").hasAnyRole("ADMIN")
                 .antMatchers("seller/product/add","seller/product/{id}","seller/product/update/{productId}").hasAnyRole("SELLER")
-                .antMatchers("product/activate/{id}","product/deactivate/{id}").hasAnyRole("ADMIN")
+                .antMatchers("product/activate/{id}","product/deactivate/{id}","products").hasAnyRole("ADMIN")
 
 
                 .anyRequest().authenticated()

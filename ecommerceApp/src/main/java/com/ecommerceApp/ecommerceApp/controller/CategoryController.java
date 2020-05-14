@@ -1,7 +1,6 @@
 package com.ecommerceApp.ecommerceApp.controller;
 
 import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
-import com.ecommerceApp.ecommerceApp.dtos.CategoryFilterDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.services.CategoryMetaDataFieldService;
@@ -32,7 +31,7 @@ public class CategoryController {
     }
 
     //===================adding metadata fields===================
-    @PostMapping("/metadata-fields")
+    @PostMapping("/admin/metadata-fields")
     public ResponseEntity addMetaDataField(@RequestParam String fieldName) {
         return categoryMetaDataFieldService.addNewMetadataField(fieldName);
     }
@@ -55,16 +54,12 @@ public class CategoryController {
     public CategoryDto viewCategory(@PathVariable Long id, HttpServletRequest httpServletRequest) {
         return categoryService.getCategory(id);
     }
+
     //================API to view all categories=============================
     @GetMapping("view/all/categories")
-    public List<CategoryDto> viewAllCategory()
-    {
-     return  categoryService.getAll();
+    public List<CategoryDto> viewAllCategory() {
+        return categoryService.getAll();
     }
-//=================API to filtering details
-@GetMapping("/customer/filtering/{id}")
-public CategoryFilterDto getFilteringDetails(@PathVariable Long id) {
-    return categoryService.getFilteringDetails(id);
-}
+
 
 }

@@ -88,15 +88,19 @@ public class ProductVariationService {
     }
 
     public ResponseEntity saveNewProductVariation(String email, ProductVariationSellerDto variationDto) {
-        String message = validateNewProductVariation(email, variationDto);
-        if (!message.equalsIgnoreCase("success")) {
-            return new ResponseEntity("Success", HttpStatus.BAD_REQUEST);
-        }
+       /* if(variationDto.getQuantityAvailable()<=0||variationDto.getPrice()<=0)
 
-        
-        ProductVariation newVariation = toProductVariation(variationDto);
-        productVariationRepository.save(newVariation);
-        return new ResponseEntity("Success", HttpStatus.CREATED);
+        String message = validateNewProductVariation(email, variationDto);
+       if (!message.equalsIgnoreCase("success")) {
+            return new ResponseEntity("Enter the fields again", HttpStatus.BAD_REQUEST);
+        }*/
+        if (variationDto.getPrice() == null || variationDto.getProductId() == null || variationDto.getQuantityAvailable() == null) {
+            return new ResponseEntity("Fields canot be null", HttpStatus.BAD_REQUEST);
+        } else {
+            ProductVariation newVariation = toProductVariation(variationDto);
+            productVariationRepository.save(newVariation);
+            return new ResponseEntity("Success", HttpStatus.CREATED);
+        }
     }
 
     public ResponseEntity getProductVariationByIdForSeller(String email, Long id) {
@@ -197,40 +201,48 @@ public class ProductVariationService {
         return null;
     }
 
-    public ResponseEntity  updateProductVariationById(Long id, String email, ProductVariationUpdateDto variationDto) {
+    public ResponseEntity updateProductVariationById(Long id, String email, ProductVariationUpdateDto variationDto) {
         String message;
 
-        ResponseEntity  validationResponse = validateProductVariationUpdate(id, email, variationDto);
-        if(validationResponse!=null)
-            return validationResponse;
+        ResponseEntity validationResponse = validateProductVariationUpdate(id, email, variationDto);
+       if (validationResponse != null) {
+           return validationResponse;
+       }
+      else  if(variationDto.getAttributes()==null||variationDto.getQuantityAvailable()==null||variationDto.getPrice()==null)
+        {
+            return new ResponseEntity("Fields cannot be empty,Please Check again",HttpStatus.BAD_REQUEST);
+        }
+        else {
 
-        ProductVariation variation = productVariationRepository.findById(id).get();
+            ProductVariation variation = productVariationRepository.findById(id).get();
 
-        // now we can save the product variation.
-        applyProductVariationUpdateDtoToProductVariation(variation, variationDto);
-        productVariationRepository.save(variation);
+            // now we can save the product variation.
+            applyProductVariationUpdateDtoToProductVariation(variation, variationDto);
+            productVariationRepository.save(variation);
 
-        message = "success";
-        return new ResponseEntity(message, HttpStatus.OK);
+            message = "success";
+            return new ResponseEntity(message, HttpStatus.OK);
+        }
 
     }
+
     private void applyProductVariationUpdateDtoToProductVariation(ProductVariation variation, ProductVariationUpdateDto variationDto) {
 
-        if(variationDto.getQuantityAvailable()!=null)
+        if (variationDto.getQuantityAvailable() != null)
             variation.setQuantityAvailable(variationDto.getQuantityAvailable());
 
-        if(variationDto.getPrice() != null)
+        if (variationDto.getPrice() != null)
             variation.setPrice(variationDto.getPrice());
 
-        if(variationDto.getActive() != null)
+        if (variationDto.getActive() != null)
             variation.setActive(variationDto.getActive());
 
-        if(variationDto.getAttributes() != null){
+        if (variationDto.getAttributes() != null) {
             Map<String, String> newAttributes = variationDto.getAttributes();
-            if(!newAttributes.isEmpty()){
+            if (!newAttributes.isEmpty()) {
                 Map<String, String> oldAttributes = variation.getProductAttributes();
 
-                for(String key : newAttributes.keySet()){
+                for (String key : newAttributes.keySet()) {
                     String newValue = newAttributes.get(key);
                     oldAttributes.put(key, newValue);
                 }
@@ -238,4 +250,4 @@ public class ProductVariationService {
         }
     }
 
-    }
+}

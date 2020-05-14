@@ -4,12 +4,15 @@ import com.ecommerceApp.ecommerceApp.Repositories.CategoryRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.CustomerRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.SellerRepository;
-import com.ecommerceApp.ecommerceApp.dtos.*;
+import com.ecommerceApp.ecommerceApp.dtos.ProductCustomerViewDto;
+import com.ecommerceApp.ecommerceApp.dtos.ProductVariationSellerDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminDto;
+import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminViewDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductCustomerDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Product;
+import com.ecommerceApp.ecommerceApp.entities.ProductVariation;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
@@ -51,6 +54,8 @@ public class ProductService {
     CustomerService customerService;
     @Autowired
     MessageSource messageSource;
+    @Autowired
+    PagingService pagingService;
 
 
     public Product toProduct(ProductSellerDto productSellerDto) {
@@ -292,6 +297,60 @@ public class ProductService {
 
     }
 
+    //============Get all products for seller===========
+    public ResponseEntity getAllProductsForSeller(String offset, String size, String sortByField, String order, Long categoryId, String brand) {
+
+
+        Pageable pageable = pagingService.getPageableObject(offset, size, sortByField, order);
+
+        List<Product> products;
+        if (categoryId != null && brand != null) {
+            products = productRepository.findByBrandAndCategoryId(brand, categoryId, pageable);
+        } else if (categoryId != null) {
+            products = productRepository.findByCategoryId(categoryId, pageable);
+        } else if (brand != null) {
+            products = productRepository.findByBrand(brand, pageable);
+        } else {
+            products = productRepository.findAll(pageable);
+        }
+
+        List<ProductSellerDto> productDtos = new ArrayList<>();
+        products.forEach(product -> {
+            ProductSellerDto dto = toProductSellerDto(product);
+            dto.setCategoryDto(categoryService.toCategoryDto(product.getCategory()));
+            productDtos.add(dto);
+        });
+
+        return new ResponseEntity(productDtos, HttpStatus.OK);
+    }
+    //=============Get list of product for admin
+
+    public ResponseEntity getAllProductsForAdmin(Long categoryId, String offset, String size, String sortByField, String order, String brand) {
+
+        Pageable pageable = pagingService.getPageableObject(offset, size, sortByField, order);
+
+        List<Product> products;
+        if (categoryId != null && brand != null) {
+            products = productRepository.findByBrandAndCategoryId(brand, categoryId, pageable);
+        } else if (categoryId != null) {
+            products = productRepository.findByCategoryId(categoryId, pageable);
+        } else if (brand != null) {
+            products = productRepository.findByBrand(brand, pageable);
+        } else {
+            products = productRepository.findAll(pageable);
+        }
+
+
+        List<ProductAdminViewDto> productDtos = new ArrayList<>();
+        products.forEach(product -> {
+            ProductAdminViewDto viewDto = new ProductAdminViewDto();
+            ProductSellerDto dto = toProductSellerDto(product);
+            dto.setCategoryDto(categoryService.toCategoryDto(product.getCategory()));
+            viewDto.setProductDto(dto);
+            productDtos.add(viewDto);
+
+        });
+        return new ResponseEntity(productDtos, HttpStatus.OK);
     }
 
-
+}

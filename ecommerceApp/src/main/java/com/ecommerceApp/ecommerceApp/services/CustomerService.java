@@ -13,8 +13,11 @@ import com.ecommerceApp.ecommerceApp.exceptions.EmailAlreadyExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.PasswordNotMatchedException;
 import com.ecommerceApp.ecommerceApp.exceptions.UserNotFountException;
 import com.ecommerceApp.ecommerceApp.security.AppUser;
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,9 +33,12 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Component
+
 public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    MessageSource messageSource;
 
     @Autowired
     VerificationTokenRepository verificationTokenRepository;
@@ -47,6 +53,11 @@ public class CustomerService {
     UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    public void deleteVerificationToken(String token){
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        verificationTokenRepository.delete(verificationToken);
+    }
 
 
     Customer initializeNewCustomer(Customer customer) {
@@ -65,9 +76,9 @@ public class CustomerService {
 
     public ResponseEntity createNewCustomer(CustomerRegistrationDto customerRegistrationDto) throws
             EmailAlreadyExistsException {
+        ResponseEntity<String> responseEntity;
 
         Customer customer = modelMapper.map(customerRegistrationDto, Customer.class);
-
         if (customerRepository.findByEmail(customer.getEmail()) != null) // User already exists with this email
         { // throw new EmailAlreadyExistsException("User already exists with email : " + customer.getEmail());
             return new ResponseEntity("Email id already exists", HttpStatus.CONFLICT);
@@ -78,6 +89,7 @@ public class CustomerService {
             customerRepository.save(initializeNewCustomer(customer));
 
             VerificationToken verificationToken = new VerificationToken(customer);
+            verificationToken.setEmail(customer.getEmail());
             verificationTokenRepository.save(verificationToken);
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -91,8 +103,10 @@ public class CustomerService {
             mailService.sendEmail(mailMessage);
 
         }
-        return new ResponseEntity("Registration Successful",HttpStatus.CREATED);
-       // return ResponseEntity.status(HttpStatus.CREATED).build();
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("message-registration-added", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+        //    return new ResponseEntity("Registration Successful",HttpStatus.CREATED);
+        // return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     public String validateRegistrationToken(String userToken) {
@@ -101,9 +115,11 @@ public class CustomerService {
 
         if (foundToken != null) {
             Customer customer = customerRepository.findByEmail(foundToken.getEmail());
+            customer.setActive(true);
             customer.setEnabled(true);
             customerRepository.save(customer);
-            return "account verified";
+            deleteVerificationToken(userToken);
+            return "Your Account is active";
         }
         return "something went wrong!";
     }
@@ -178,7 +194,7 @@ public class CustomerService {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> deleteAddress(String email, Long id) {
+ /*   public ResponseEntity<String> deleteAddress(String email, Long id) {
         Optional<Address> addressOptional = addressRepository.findById(id);
         if (!addressOptional.isPresent()) {
             return new ResponseEntity<>("No address found with the given id", HttpStatus.NOT_FOUND);
@@ -189,16 +205,23 @@ public class CustomerService {
             return new ResponseEntity<>("Address successfully deleted", HttpStatus.OK);
         }
         return new ResponseEntity<>("Invalid Operation", HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
     public ResponseEntity<String> updateCustomerAddress(String username, AddressDto addressDto, Long id) {
+        ResponseEntity<String> responseEntity;
         Optional<Address> address = addressRepository.findById(id);
-        if (!address.isPresent())
-            return new ResponseEntity<>("Address not found", HttpStatus.NOT_FOUND);
+        if (!address.isPresent()) {
+            //return new ResponseEntity<>("Address not found", HttpStatus.NOT_FOUND);
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("message-address-not-found", null, LocaleContextHolder.getLocale()));
+            return responseEntity;
+        }
         Address savedAddress = address.get();
         Users users = userRepository.findByEmail(username);
-        if (!savedAddress.getUser().getEmail().equals(username))
-            return new ResponseEntity<>("Address not found", HttpStatus.BAD_REQUEST);
+        if (!savedAddress.getUser().getEmail().equals(username)) {
+            //   return new ResponseEntity<>("Address not found", HttpStatus.BAD_REQUEST);
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("message-address-not-found", null, LocaleContextHolder.getLocale()));
+            return responseEntity;
+        }
         if (addressDto.getCity() != null)
             savedAddress.setCity(addressDto.getCity());
         if (addressDto.getState() != null)
@@ -235,4 +258,35 @@ public class CustomerService {
             throw new PasswordNotMatchedException("password didn't matched");
     }
 
+    ;
+
+    public String activateCustomer(String userToken) {
+        VerificationToken token1 = verificationTokenRepository.findByToken(userToken);
+        if (token1 != null) {
+            Customer customer = customerRepository.findByEmail(token1.getEmail());
+            customer.setActive(true);
+            customer.setEnabled(true);
+            userRepository.save(customer);
+            deleteVerificationToken(userToken);
+
+            return "Your account has been activated";
+        } else {
+            return "http://localhost:8080/register/activate" + userToken + "has been expired";
+        }
+    }
+
+    @Transactional
+    public ResponseEntity deleteAddress(String email, Long id) {
+
+        Optional<Address> optAddress = addressRepository.findById(id);
+        if (!optAddress.isPresent()) {
+            return new ResponseEntity("Not present", HttpStatus.NOT_FOUND);
+        }
+        Address savedAddress = optAddress.get();
+        if (savedAddress.getUser().getEmail().equals(email)) {
+            addressRepository.deleteAddressById(id);
+            return new ResponseEntity("Success", HttpStatus.OK);
+        }
+        return new ResponseEntity("already exists", HttpStatus.CONFLICT);
+    }
 }

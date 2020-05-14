@@ -39,10 +39,12 @@ public class CategoryMetaDataFieldService {
 
     public ResponseEntity addNewMetadataField(String fieldName) {
         CategoryMetadataField metafield = categoryFieldRepository.findByName(fieldName);
-        BaseDto response;
+
         if (metafield != null) {
             return new ResponseEntity("Invalid Entry, Field Already Exists", HttpStatus.CONFLICT);
         }
+        else if(fieldName==null)
+            return new ResponseEntity("FieldName cannot be null",HttpStatus.BAD_REQUEST);
 
         metafield = new CategoryMetadataField();
         metafield.setName(fieldName);

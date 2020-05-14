@@ -1,16 +1,18 @@
 package com.ecommerceApp.ecommerceApp.dtos;
+
 import com.ecommerceApp.ecommerceApp.validators.ValidPassword;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UserRegistrationDto {
     @NotNull
     @NotEmpty
     private String firstName;
 
-    @NotNull
+
     private String middleName;
 
     @NotNull
@@ -19,16 +21,19 @@ public class UserRegistrationDto {
 
     @Email
     @NotEmpty(message = "{email.notempty}")
+    @NotEmpty
     private String email;
 
 
     @NotNull
-    @ValidPassword
+    @NotEmpty
+    // @ValidPassword
+    @Size(min = 6)
     private String password;
 
-
     @NotNull
-    @ValidPassword
+    @NotEmpty
+    //@ValidPassword
     private String confirmPassword;
 
 

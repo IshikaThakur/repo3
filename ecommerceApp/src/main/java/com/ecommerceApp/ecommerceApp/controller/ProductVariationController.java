@@ -46,9 +46,7 @@ public class ProductVariationController {
 
 
     @PatchMapping("/seller/product-variation/{variationId}")
-    public ResponseEntity updateProductVariationById(
-            @PathVariable Long variationId,
-            @RequestBody ProductVariationUpdateDto variationDto,
+    public ResponseEntity updateProductVariationById(@PathVariable Long variationId, @RequestBody ProductVariationUpdateDto variationDto,
             HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         String email = principal.getName();

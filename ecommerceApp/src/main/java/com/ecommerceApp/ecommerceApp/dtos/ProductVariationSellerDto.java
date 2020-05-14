@@ -1,19 +1,23 @@
 package com.ecommerceApp.ecommerceApp.dtos;
 
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductVariationSellerDto {
 
     private Long id;
 
     @NotNull
+    @NotEmpty
     private Long productId;
+    @NotEmpty
     private Integer quantityAvailable;
     private Double price;
 
