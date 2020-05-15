@@ -1,7 +1,9 @@
 package com.ecommerceApp.ecommerceApp.controller;
 
+import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
 import com.ecommerceApp.ecommerceApp.entities.JobModel;
 import com.ecommerceApp.ecommerceApp.scheduler.ProductScheduler;
+import com.ecommerceApp.ecommerceApp.services.ProductService;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -11,10 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class JobController {
@@ -23,6 +22,8 @@ public class JobController {
     private Scheduler scheduler;
     @Autowired
     private ApplicationContext context;;
+    @Autowired
+    ProductService productService;
 
     @ResponseBody
     @RequestMapping(value = "admin/schedule/report/making", method = RequestMethod.POST)
@@ -36,4 +37,9 @@ public class JobController {
 
         return new ResponseEntity<JobModel>(jobModel, HttpStatus.CREATED);
     }
+   @GetMapping("admin/schedule/report")
+    public ResponseEntity reportMakingBegun()
+   {
+       return productService.getAllProductAndSellerInfoByAdmin();
+   }
 }

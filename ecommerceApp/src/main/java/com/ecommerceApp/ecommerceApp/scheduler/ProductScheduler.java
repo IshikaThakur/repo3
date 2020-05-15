@@ -50,12 +50,12 @@ public class ProductScheduler implements Job {
         List<Object[]> products = productRepository.getProducts();
         for (Object[] values : products) {
             System.out.println(values[0].toString() + " " + values[1].toString());
-            System.out.println("Report Making has begun....You may want to add some other detail that is required to do the feature");
+          //  System.out.println("Report Making has begun....You may want to add some other detail that is required to do the feature");
 
         }
     }
 }
-  
+
 
 
 
