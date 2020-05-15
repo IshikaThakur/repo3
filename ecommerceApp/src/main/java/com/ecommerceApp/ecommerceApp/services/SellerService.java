@@ -108,6 +108,7 @@ public class SellerService {
 
            Seller seller = toSeller(sellerRegistrationDto);
         seller.setPassword(passwordEncoder.encode(seller.getPassword()));
+        seller.setEnabled(true);
         sellerRepository.save(seller);
         acknowledgementEmail(seller.getEmail());
         return "Account created successfully.";

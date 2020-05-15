@@ -8,6 +8,9 @@ import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.services.CurrentUserService;
 import com.ecommerceApp.ecommerceApp.services.EmailSenderService;
 import io.swagger.annotations.ApiOperation;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
 import static org.springframework.data.jpa.domain.AbstractAuditable_.createdDate;
 
 @Component
-public class ProductScheduler {
+public class ProductScheduler implements Job {
     @Autowired
     ProductVariationRepository productVariationRepository;
     @Autowired
@@ -42,26 +45,19 @@ public class ProductScheduler {
     ProductRepository productRepository;
     private static final Logger logger = LoggerFactory.getLogger(ProductScheduler.class);
 
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        List<Object[]> products = productRepository.getProducts();
+        for (Object[] values : products) {
+            System.out.println(values[0].toString() + " " + values[1].toString());
+            System.out.println("Report Making has begun....You may want to add some other detail that is required to do the feature");
 
-  // @Scheduled(fixedRate = 60000)
-  //@Scheduled(cron = " * 20 * * * ?")
-    public void newProducts() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        Iterable<Product> products = productRepository.findAllWithCreationDate();
-        for (Product product : products) {
-            System.out.println(product);
-                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-                simpleMailMessage.setSubject("Product");
-                simpleMailMessage.setText("A product with following details has been created - \n" +
-                        "name - " + product.getName() + "\n" +
-                        "brand - " + product.getBrand() + "\n" );
-                simpleMailMessage.setFrom("tanu.thakur0816@gmail.com");
-                simpleMailMessage.setTo("ishikathakur880@gmail.com");
-                emailSenderService.sendEmail(simpleMailMessage);
-            }
         }
     }
+}
+  
+
+
 
 
 
