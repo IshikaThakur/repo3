@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class JobController {
 
@@ -24,6 +26,8 @@ public class JobController {
     private ApplicationContext context;;
     @Autowired
     ProductService productService;
+    @Autowired
+    ProductRepository productRepository;
 
     @ResponseBody
     @RequestMapping(value = "admin/schedule/report/making", method = RequestMethod.POST)
@@ -35,11 +39,7 @@ public class JobController {
 
         scheduler.scheduleJob(jobDetail, cronTrigger);
 
-        return new ResponseEntity<JobModel>(jobModel, HttpStatus.CREATED);
+       return new ResponseEntity<JobModel>(jobModel, HttpStatus.CREATED);
+
     }
-   @GetMapping("admin/schedule/report")
-    public ResponseEntity reportMakingBegun()
-   {
-       return productService.getAllProductAndSellerInfoByAdmin();
-   }
-}
+  }

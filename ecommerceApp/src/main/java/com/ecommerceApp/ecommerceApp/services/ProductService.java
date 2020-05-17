@@ -1,19 +1,12 @@
 package com.ecommerceApp.ecommerceApp.services;
 
-import com.ecommerceApp.ecommerceApp.Repositories.CategoryRepository;
-import com.ecommerceApp.ecommerceApp.Repositories.CustomerRepository;
-import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
-import com.ecommerceApp.ecommerceApp.Repositories.SellerRepository;
-import com.ecommerceApp.ecommerceApp.dtos.ProductCustomerViewDto;
-import com.ecommerceApp.ecommerceApp.dtos.ProductVariationSellerDto;
+import com.ecommerceApp.ecommerceApp.Repositories.*;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminViewDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductCustomerDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
-import com.ecommerceApp.ecommerceApp.entities.Product;
-import com.ecommerceApp.ecommerceApp.entities.ProductVariation;
-import com.ecommerceApp.ecommerceApp.entities.Seller;
+import com.ecommerceApp.ecommerceApp.entities.*;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
@@ -56,6 +49,8 @@ public class ProductService {
     MessageSource messageSource;
     @Autowired
     PagingService pagingService;
+    @Autowired
+    ReportRepository reportRepository;
 
 
     public Product toProduct(ProductSellerDto productSellerDto) {
@@ -355,7 +350,17 @@ public class ProductService {
 
     public ResponseEntity getAllProductAndSellerInfoByAdmin()
     {
+
         return new ResponseEntity("Your task is on progress, You may want to add some other changes???",HttpStatus.OK);
+    }
+    public List<Report> getReport(String offset, String size, String field,String order) {
+        Integer pageNo = Integer.parseInt(offset);
+        Integer pageSize = Integer.parseInt(size);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(field).ascending());
+        List<Report> reports = reportRepository.findAll();
+        List<Report> reports1 = new ArrayList<>();
+        reports.forEach(report -> reports1.add(report));
+        return reports1;
     }
 
 }

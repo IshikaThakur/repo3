@@ -85,15 +85,7 @@ public class Bootstrap implements ApplicationRunner {
         userRepository.save(seller1);
         userRepository.save(admin1);
         userRepository.save(customer1);
-
         System.out.println("Total users saved::" + userRepository.count());
-        Product shirt = new Product("Shirt", "Check based design", "Levi's");
-        shirt.setSeller(sellerRepository.findByEmail("rounakSheikh@gmail.com"));
-        Product jeans = new Product("Jeans", "Narrow bottom", "Buffalo");
-        shirt.setId(100L);
-        jeans.setId(101L);
-        seller1.addProduct(shirt);
-        seller1.addProduct(jeans);
 
 
         Category fashion = new Category("fashion");
@@ -104,11 +96,25 @@ public class Bootstrap implements ApplicationRunner {
         clothing.addSubCategory(men);
         clothing.addSubCategory(women);
         categoryRepository.save(fashion);
-        productRepository.save(shirt);
-        productRepository.save(jeans);
-
+       // productRepository.save(shirt);
+       // productRepository.save(jeans);
+       // shirt.setCategory(men);
+       // productRepository.save(shirt);
         System.out.println("total categories saved - " + categoryRepository.count());
 
+        Product shirt = new Product("Shirt", "Check based design", "Levi's");
+        shirt.setSeller(sellerRepository.findByEmail("rounakSheikh@gmail.com"));
+        shirt.setCategory(men);
+
+        Product jeans = new Product("Jeans", "Narrow bottom", "Buffalo");
+        shirt.setId(100L);
+        jeans.setId(101L);
+        seller1.addProduct(shirt);
+        seller1.addProduct(jeans);
+        jeans.setCategory(men);
+        jeans.setCategory(women);
+        productRepository.save(shirt);
+        productRepository.save(jeans);
 
 
 

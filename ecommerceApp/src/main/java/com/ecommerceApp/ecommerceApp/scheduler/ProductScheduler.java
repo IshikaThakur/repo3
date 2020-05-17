@@ -2,8 +2,10 @@ package com.ecommerceApp.ecommerceApp.scheduler;
 
 import com.ecommerceApp.ecommerceApp.Repositories.ProductRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.ProductVariationRepository;
+import com.ecommerceApp.ecommerceApp.Repositories.ReportRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.SellerRepository;
 import com.ecommerceApp.ecommerceApp.entities.Product;
+import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.services.CurrentUserService;
 import com.ecommerceApp.ecommerceApp.services.EmailSenderService;
@@ -19,6 +21,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -36,25 +39,23 @@ public class ProductScheduler implements Job {
     @Autowired
     ProductVariationRepository productVariationRepository;
     @Autowired
-    SellerRepository sellerRepository;
-    @Autowired
-    EmailSenderService emailSenderService;
-    @Autowired
-    CurrentUserService currentUserService;
-    @Autowired
     ProductRepository productRepository;
+    @Autowired
+    ReportRepository reportRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(ProductScheduler.class);
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         List<Object[]> products = productRepository.getProducts();
         for (Object[] values : products) {
-            System.out.println(values[0].toString() + " " + values[1].toString());
-          //  System.out.println("Report Making has begun....You may want to add some other detail that is required to do the feature");
+           // System.out.println(values[0].toString() + " " + values[1].toString());
+        Report link = reportRepository.save(new Report(new Object[0].toString()));
+    }
 
         }
     }
-}
+
 
 
 

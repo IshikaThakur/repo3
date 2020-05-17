@@ -41,6 +41,6 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
     @Query(value = "select name,brand from Product where CURRENT_DATE = :(CAST(createdDate() AS date))", nativeQuery = true)
     List<Product> findAllWithCreationDate();
 
-   @Query(value = "Select Product.name,Users.email from Product INNER JOIN Users ON Product.seller_user_id =Users.id ",nativeQuery = true)
+   @Query(value = "Select Product.name,Users.email,Product.brand,CATEGORY.name as category from Product INNER JOIN Users ON Product.seller_user_id =Users.id INNER JOIN CATEGORY ON Product.category_id =CATEGORY.id ",nativeQuery = true)
    public List<Object[]> getProducts();
 }
