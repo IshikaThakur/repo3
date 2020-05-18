@@ -33,20 +33,21 @@ public class ActivateScheduler {
 
 
     @Scheduled(fixedRate = 40000)
-    @Transactional
-    public void getPro() {
-        List<Object[]> products = productRepository.getProducts();
-        for (Object[] values : products) {
-            // System.out.println(values[0].toString() + " " + values[1].toString());
-            Report report=new Report();
-            report.setProductname(values[0].toString());
-            report.setSellername(values[1].toString());
-            report.setBrand(values[2].toString());
-           report.setCategoryName(values[3].toString());
-            reportRepository.save(report);
+    public void getRep()
+   {
+   List<Object[]> products = productRepository.getProducts();
+            for (Object[] values : products) {
+        // System.out.println(values[0].toString() + " " + values[1].toString());
+        Report report = new Report();
+        report.setProductname(values[0].toString());
+        report.setSellername(values[1].toString());
+        report.setBrand(values[2].toString());
+        report.setCategoryName(values[3].toString());
+        reportRepository.save(report);
 
 
-
+    }
+}
 
 
   /*  public void unlockAccount() {
@@ -54,7 +55,7 @@ public class ActivateScheduler {
         for (Users user : list) {
             user.setActive(true);
             userRepository.save(user);
-        }*/
-
         }
-    }}
+
+        }*/
+    }

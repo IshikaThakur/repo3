@@ -1,5 +1,6 @@
 package com.ecommerceApp.ecommerceApp.controller;
 
+import com.ecommerceApp.ecommerceApp.criteria.ProductRepositoryCustom;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.services.ProductService;
@@ -16,6 +17,8 @@ import java.util.List;
 public class ProductController {
     @Autowired
     ProductService productService;
+    @Autowired
+    ProductRepositoryCustom productRepositoryCustom;
 
     @PostMapping("/seller/product/add")
     public ResponseEntity<String> createProduct(@Valid @RequestBody ProductSellerDto productSellerDto, HttpServletRequest request) {
@@ -93,6 +96,7 @@ public class ProductController {
 
          return productService.getAllSimilarProductsByProductId(productId, offset, size, sortByField, order);
      }*/
+    //=======================API to check report by admin=============================
     @GetMapping(value = "admin/get/report")
     public List<Report> getReport(@RequestParam(defaultValue = "0") String offset,
                                   @RequestParam(defaultValue = "10") String size,
@@ -100,5 +104,11 @@ public class ProductController {
                                   @RequestParam(defaultValue = "ascending") String order) {
 
     return productService.getReport(offset,size,sortByField,order);
+}
+//=======================Application of criteria Query to fetch report========
+  @GetMapping(value = "admin/get/reports")
+    public List<Report> getReports()
+{
+    return productRepositoryCustom.createReport();
 }
 }

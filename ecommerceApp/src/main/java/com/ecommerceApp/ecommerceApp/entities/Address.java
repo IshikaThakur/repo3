@@ -14,6 +14,7 @@ public class Address extends Auditable<String> {
     private String zipCode;
     private String country;
     private String label;
+    private boolean deleted;
 
     @ManyToOne
     @JoinColumn(name = "users_id")
@@ -95,6 +96,14 @@ public class Address extends Auditable<String> {
 
     public void setUsers(Users users) {
         this.users = users;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

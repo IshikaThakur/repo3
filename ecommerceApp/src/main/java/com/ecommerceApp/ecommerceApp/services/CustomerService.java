@@ -4,6 +4,7 @@ import com.ecommerceApp.ecommerceApp.Repositories.AddressRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.CustomerRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.UserRepository;
 import com.ecommerceApp.ecommerceApp.Repositories.VerificationTokenRepository;
+import com.ecommerceApp.ecommerceApp.criteria.ProductRepositoryCustom;
 import com.ecommerceApp.ecommerceApp.dtos.*;
 import com.ecommerceApp.ecommerceApp.entities.Address;
 import com.ecommerceApp.ecommerceApp.entities.Customer;
@@ -53,6 +54,8 @@ public class CustomerService {
     UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    ProductRepositoryCustom productRepositoryCustom;
 
     public void deleteVerificationToken(String token){
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
@@ -193,19 +196,22 @@ public class CustomerService {
         String message = "Address added successfully";
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
+    //==============Criteria query applied===============
 
- /*   public ResponseEntity<String> deleteAddress(String email, Long id) {
+   public ResponseEntity <String> deleteAddress(String email, Long id) {
         Optional<Address> addressOptional = addressRepository.findById(id);
         if (!addressOptional.isPresent()) {
-            return new ResponseEntity<>("No address found with the given id", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("No address found with the given id", HttpStatus.NOT_FOUND);
         }
         Address savedAddress = addressOptional.get();
         if (savedAddress.getUser().getEmail().equals(email)) {
-            addressRepository.deleteAddressById(id);
+           // addressRepository.deleteAddressById(id);
+            productRepositoryCustom.deleteAddressById(id);
+            savedAddress.setDeleted(true);
             return new ResponseEntity<>("Address successfully deleted", HttpStatus.OK);
         }
         return new ResponseEntity<>("Invalid Operation", HttpStatus.BAD_REQUEST);
-    }*/
+    }
 
     public ResponseEntity<String> updateCustomerAddress(String username, AddressDto addressDto, Long id) {
         ResponseEntity<String> responseEntity;
@@ -275,7 +281,7 @@ public class CustomerService {
         }
     }
 
-    @Transactional
+ /*   @Transactional
     public ResponseEntity deleteAddress(String email, Long id) {
 
         Optional<Address> optAddress = addressRepository.findById(id);
@@ -288,5 +294,5 @@ public class CustomerService {
             return new ResponseEntity("Success", HttpStatus.OK);
         }
         return new ResponseEntity("already exists", HttpStatus.CONFLICT);
-    }
+    }*/
 }

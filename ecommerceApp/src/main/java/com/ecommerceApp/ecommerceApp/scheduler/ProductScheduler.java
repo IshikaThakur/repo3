@@ -23,6 +23,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,26 +38,29 @@ import static org.springframework.data.jpa.domain.AbstractAuditable_.createdDate
 @Component
 public class ProductScheduler implements Job {
     @Autowired
-    ProductVariationRepository productVariationRepository;
-    @Autowired
     ProductRepository productRepository;
     @Autowired
     ReportRepository reportRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductScheduler.class);
-
+   @Transactional
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        List<Object[]> products = productRepository.getProducts();
-        for (Object[] values : products) {
-           // System.out.println(values[0].toString() + " " + values[1].toString());
-        Report link = reportRepository.save(new Report(new Object[0].toString()));
-    }
+            List<Object[]> products = productRepository.getProducts();
+            for (Object[] values : products) {
+                // System.out.println(values[0].toString() + " " + values[1].toString());
+                Report report = new Report();
+                report.setProductname(values[0].toString());
+                report.setSellername(values[1].toString());
+                report.setBrand(values[2].toString());
+                report.setCategoryName(values[3].toString());
+                reportRepository.save(report);
 
+
+            }
         }
+
     }
-
-
 
 
 

@@ -1,6 +1,7 @@
 package com.ecommerceApp.ecommerceApp.services;
 
 import com.ecommerceApp.ecommerceApp.Repositories.*;
+import com.ecommerceApp.ecommerceApp.criteria.ProductRepositoryCustom;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminViewDto;
@@ -51,6 +52,8 @@ public class ProductService {
     PagingService pagingService;
     @Autowired
     ReportRepository reportRepository;
+    @Autowired
+    ProductRepositoryCustom productRepositoryCustom;
 
 
     public Product toProduct(ProductSellerDto productSellerDto) {
