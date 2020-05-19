@@ -12,7 +12,11 @@ import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
+import com.ecommerceApp.ecommerceApp.scheduler.ProductScheduler;
+import com.nimbusds.jwt.util.DateUtils;
 import org.modelmapper.ModelMapper;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,7 +28,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
 @Service
 public class ProductService {
@@ -351,8 +361,21 @@ public class ProductService {
         return new ResponseEntity(productDtos, HttpStatus.OK);
     }
 
-    public ResponseEntity getAllProductAndSellerInfoByAdmin()
+    public ResponseEntity getAllProductAndSellerInfoByAdmin() throws SchedulerException
     {
+        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+        Scheduler scheduler = schedulerFactory.getScheduler();
+        scheduler.start();
+        JobDetail job = JobBuilder.newJob(ProductScheduler.class)
+                .withIdentity("myJob", "group1")
+                .build();
+        SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
+                .withIdentity("trigger2", "group1")
+                .withSchedule(simpleSchedule()
+                        .withIntervalInSeconds(10)
+                        .withRepeatCount(1))
+                .forJob("job1")
+                .build();
 
         return new ResponseEntity("Your task is on progress, You may want to add some other changes???",HttpStatus.OK);
     }

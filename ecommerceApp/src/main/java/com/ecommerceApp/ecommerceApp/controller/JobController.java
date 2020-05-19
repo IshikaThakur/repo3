@@ -43,4 +43,9 @@ public class JobController {
 
 
     }
+    @GetMapping(value="admin/schedule/trigger")
+    public ResponseEntity scheduleProcess() throws SchedulerException {
+        productService.getAllProductAndSellerInfoByAdmin();
+        return new ResponseEntity("Success",HttpStatus.OK);
+    }
   }

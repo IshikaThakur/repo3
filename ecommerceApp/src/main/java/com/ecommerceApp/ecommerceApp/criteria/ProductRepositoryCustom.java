@@ -1,11 +1,13 @@
 package com.ecommerceApp.ecommerceApp.criteria;
 
 import com.ecommerceApp.ecommerceApp.entities.Address;
+import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.JoinColumn;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
@@ -41,4 +43,5 @@ public class ProductRepositoryCustom {
         }
         return reports;
     }
+
 }

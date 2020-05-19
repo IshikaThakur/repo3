@@ -32,7 +32,7 @@ public class ActivateScheduler {
     ReportRepository reportRepository;
 
 
-    @Scheduled(fixedRate = 40000)
+ //   @Scheduled(fixedRate = 40000)
     public void getRep()
    {
    List<Object[]> products = productRepository.getProducts();
