@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -23,7 +25,8 @@ public class JobController {
     @Autowired
     private Scheduler scheduler;
     @Autowired
-    private ApplicationContext context;;
+    private ApplicationContext context;
+
     @Autowired
     ProductService productService;
     @Autowired
@@ -34,18 +37,25 @@ public class JobController {
     public ResponseEntity<JobModel> dailyJob(@RequestBody JobModel jobModel) throws SchedulerException {
         JobDetail jobDetail = context.getBean(
                 JobDetail.class, jobModel.getName(), "MyDailyJob", ProductScheduler.class);
-       Trigger cronTrigger = context.<Trigger>getBean(
-               Trigger.class, jobModel.getCronExpression(), "MyDailyJob");
+        Trigger cronTrigger = context.<Trigger>getBean(
+                Trigger.class, jobModel.getCronExpression(), "MyDailyJob");
 
         scheduler.scheduleJob(jobDetail, cronTrigger);
 
-       return new ResponseEntity<JobModel>(jobModel, HttpStatus.CREATED);
+        return new ResponseEntity<JobModel>(jobModel, HttpStatus.CREATED);
 
 
     }
-    @GetMapping(value="admin/schedule/trigger")
+
+    @GetMapping(value = "admin/schedule/trigger")
     public ResponseEntity scheduleProcess() throws SchedulerException {
         productService.getAllProductAndSellerInfoByAdmin();
-        return new ResponseEntity("Success",HttpStatus.OK);
+        return new ResponseEntity("Your task is in progress......", HttpStatus.OK);
     }
-  }
+
+@GetMapping(value="admin/schedule/trigger2")
+public ResponseEntity schedulenew()
+{
+    productService.getRep();
+    return new ResponseEntity("Your task is in progress",HttpStatus.OK);
+}}

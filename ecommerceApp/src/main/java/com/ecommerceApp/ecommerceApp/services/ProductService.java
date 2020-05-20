@@ -13,7 +13,6 @@ import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
 import com.ecommerceApp.ecommerceApp.scheduler.ProductScheduler;
-import com.nimbusds.jwt.util.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -26,12 +25,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -361,25 +358,31 @@ public class ProductService {
         return new ResponseEntity(productDtos, HttpStatus.OK);
     }
 
-    public ResponseEntity getAllProductAndSellerInfoByAdmin() throws SchedulerException
-    {
+    public ResponseEntity getAllProductAndSellerInfoByAdmin() throws SchedulerException {
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         Scheduler scheduler = schedulerFactory.getScheduler();
         scheduler.start();
+       /* //Defining a job
         JobDetail job = JobBuilder.newJob(ProductScheduler.class)
-                .withIdentity("myJob", "group1")
-                .build();
-        SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
-                .withIdentity("trigger2", "group1")
+                .withIdentity("job1", "group1")
+                .build();*/
+       SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
+                .withIdentity("trigger1", "group1")
                 .withSchedule(simpleSchedule()
                         .withIntervalInSeconds(10)
                         .withRepeatCount(1))
-                .forJob("job1")
+                .forJob("job1", "group1")
                 .build();
 
-        return new ResponseEntity("Your task is on progress, You may want to add some other changes???",HttpStatus.OK);
+        scheduler.scheduleJob(trigger);
+
+        //shut down the scheduler
+        // scheduler.shutdown();
+
+        return new ResponseEntity("Your task is on progress, You may want to add some other changes???", HttpStatus.OK);
     }
-    public List<Report> getReport(String offset, String size, String field,String order) {
+
+    public List<Report> getReport(String offset, String size, String field, String order) {
         Integer pageNo = Integer.parseInt(offset);
         Integer pageSize = Integer.parseInt(size);
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(field).ascending());
@@ -388,5 +391,25 @@ public class ProductService {
         reports.forEach(report -> reports1.add(report));
         return reports1;
     }
+  // @Scheduled(initialDelay = 40000,fixedRate = 50000)
+    @Async
+    public List<Report> getRep() {
+
+        List<Object[]> products = productRepository.getProducts();
+
+        for (Object[] values : products) {
+            // System.out.println(values[0].toString() + " " + values[1].toString());
+            Report report = new Report();
+            report.setProductname(values[0].toString());
+            report.setSellername(values[1].toString());
+            report.setBrand(values[2].toString());
+            report.setCategoryName(values[3].toString());
+            reportRepository.save(report);
+
+
+        }
+
+       return null;
+   }
 
 }

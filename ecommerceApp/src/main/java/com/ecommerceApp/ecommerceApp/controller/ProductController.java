@@ -103,12 +103,13 @@ public class ProductController {
                                   @RequestParam(defaultValue = "id") String sortByField,
                                   @RequestParam(defaultValue = "ascending") String order) {
 
-    return productService.getReport(offset,size,sortByField,order);
+        return productService.getReport(offset, size, sortByField, order);
+    }
+
+    //=======================Application of criteria Query to fetch report========
+    @GetMapping(value = "admin/get/reports")
+    public List<Report> getReports() {
+        return productRepositoryCustom.createReport();
+    }
 }
-//=======================Application of criteria Query to fetch report========
-  @GetMapping(value = "admin/get/reports")
-    public List<Report> getReports()
-{
-    return productRepositoryCustom.createReport();
-}
-}
+

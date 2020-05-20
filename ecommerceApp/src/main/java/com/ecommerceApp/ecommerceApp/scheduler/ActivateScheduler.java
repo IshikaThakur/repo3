@@ -8,9 +8,13 @@ import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.entities.Users;
 import org.apache.catalina.User;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class ActivateScheduler {
+public class ActivateScheduler  {
     @Autowired
     UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(ActivateScheduler.class);
@@ -30,13 +34,12 @@ public class ActivateScheduler {
     ProductRepository productRepository;
     @Autowired
     ReportRepository reportRepository;
-
-
- //   @Scheduled(fixedRate = 40000)
-    public void getRep()
+   //@Scheduled(fixedRate = 20000)
+    public void getReport()
    {
    List<Object[]> products = productRepository.getProducts();
-            for (Object[] values : products) {
+
+         for (Object[] values : products) {
         // System.out.println(values[0].toString() + " " + values[1].toString());
         Report report = new Report();
         report.setProductname(values[0].toString());
@@ -49,13 +52,12 @@ public class ActivateScheduler {
     }
 }
 
-
-  /*  public void unlockAccount() {
+/*@Scheduled(fixedRate = 40000)
+   public void unlockAccount() {
         List<Users> list = userRepository.findByisActive(false);
         for (Users user : list) {
             user.setActive(true);
             userRepository.save(user);
         }
-
-        }*/
-    }
+*/
+        }
