@@ -29,6 +29,10 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0'
 
+	//redis
+	compile group: 'redis.clients', name: 'jedis', version: '3.3.0'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.2.6.RELEASE'
+
 
 
 

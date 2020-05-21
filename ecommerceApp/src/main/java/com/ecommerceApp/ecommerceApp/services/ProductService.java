@@ -7,12 +7,13 @@ import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminViewDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductCustomerDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
-import com.ecommerceApp.ecommerceApp.entities.*;
+import com.ecommerceApp.ecommerceApp.entities.Product;
+import com.ecommerceApp.ecommerceApp.entities.Report;
+import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
-import com.ecommerceApp.ecommerceApp.scheduler.ProductScheduler;
 import org.modelmapper.ModelMapper;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -26,10 +27,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
@@ -366,7 +368,7 @@ public class ProductService {
         JobDetail job = JobBuilder.newJob(ProductScheduler.class)
                 .withIdentity("job1", "group1")
                 .build();*/
-       SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
+        SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
                 .withIdentity("trigger1", "group1")
                 .withSchedule(simpleSchedule()
                         .withIntervalInSeconds(10)
@@ -391,7 +393,8 @@ public class ProductService {
         reports.forEach(report -> reports1.add(report));
         return reports1;
     }
-  // @Scheduled(initialDelay = 40000,fixedRate = 50000)
+
+    // @Scheduled(initialDelay = 40000,fixedRate = 50000)
     @Async
     public List<Report> getRep() {
 
@@ -409,7 +412,7 @@ public class ProductService {
 
         }
 
-       return null;
-   }
+        return null;
+    }
 
 }

@@ -24,7 +24,7 @@ public class Product  extends Auditable<String> {
     private boolean isActive=true;
     private boolean isDeleted=false;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
 
