@@ -8,9 +8,11 @@ import java.util.Map;
 
 @Repository
 public interface ProductRedisRepository {
-    void save(Product product);
-    Map<String,Product> findAll();
-    Product findById(Long id);
-    void update(Product product);
-    void delete(Long id);
+    public void save(Product product);
+
+    public Map<String, Product> findAll();
+
+    public Product findById(Long id);
+
+    public void delete(Long id);
 }

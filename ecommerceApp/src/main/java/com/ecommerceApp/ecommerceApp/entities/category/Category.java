@@ -5,12 +5,13 @@ package com.ecommerceApp.ecommerceApp.entities.category;
 import com.ecommerceApp.ecommerceApp.entities.Product;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "CATEGORY")
-public class Category {
+public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

@@ -19,28 +19,22 @@ public class ProductAndCategoryRedisRepoImpl implements ProductRedisRepository {
 
     @Override
     public void save(Product product) {
-       hashOperations.put("PRODUCT",product.getId(),product);
+        hashOperations.put("product", product.getId(), product);
     }
 
     @Override
-    public Map<String,Product> findAll() {
-        return hashOperations.entries("PRODUCT");
+    public Map<String, Product> findAll() {
+        return hashOperations.entries("customer");
     }
 
     @Override
     public Product findById(Long id) {
-        return (Product) hashOperations.get("PRODUCT",id);
+        return (Product) hashOperations.get("product", id);
     }
 
     @Override
-    public void update(Product product) {
-        save(product);
-
+    public void delete(Long id){
+        hashOperations.delete("product", id);
     }
 
-    @Override
-    public void delete(Long id) {
-        hashOperations.delete("PRODUCT",id);
-
-    }
 }

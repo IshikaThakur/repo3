@@ -21,37 +21,23 @@ public class RedisController {
         this.productRedisRepository = productRedisRepository;
     }
 
-    @GetMapping("/product/add/{id}/name")
-    public Product add(@PathVariable("id") Long id,
-                       @PathVariable ("name") String name)
-    {
-       return productRedisRepository.findById(id);
-    }
-
     @GetMapping("/product/all")
+    @Cacheable(value = "product")
     public Map<String, Product> findAll() {
         return productRedisRepository.findAll();
     }
 
-    @GetMapping("admin/product/one/{id}")
-    @Cacheable(value = "product", key = "#id")
-    public Product findOne(@PathVariable("id") Long id) {
+    @GetMapping("/product/view/{id}")
+    @Cacheable(value = "product",key="#id")
+    public Product findProduct(@PathVariable("id") Long id) {
         return productRedisRepository.findById(id);
     }
 
 
-    @RequestMapping(value = "product/{productId}", method = RequestMethod.GET)
-    @Cacheable(value = "product", key = "#productId")
+    @RequestMapping(value = "/product/{productId}", method = RequestMethod.GET)
+    @Cacheable(value = "product",key="#productId")
     public Optional<Product> getUser(@PathVariable Integer productId) {
         return productRepository.findById(Long.valueOf(productId));
+    }
 
-    }
-    @Cacheable(value = "product", key = "#idname")
-    @GetMapping(value = "product/add/{name}")
-    public Product adding(@PathVariable("id") Long id,@PathVariable("name") String name)
-    {
-        productRedisRepository.save(new Product(name,"Gucci","Levis"));
-        return productRedisRepository.findById(id);
-    }
 }
-

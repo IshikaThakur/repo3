@@ -2,15 +2,19 @@ package com.ecommerceApp.ecommerceApp.entities;
 
 import com.ecommerceApp.ecommerceApp.auditing.Auditable;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Product  extends Auditable<String> {
+
+public class Product  extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,18 +27,18 @@ public class Product  extends Auditable<String> {
     private boolean isCancelleable=true;
     private boolean isActive=true;
     private boolean isDeleted=false;
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductVariation> variations;
-
+   @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
-
+     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductReview> reviews;
 
