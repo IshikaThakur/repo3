@@ -1,6 +1,7 @@
 package com.ecommerceApp.ecommerceApp.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Entity
 public class ProductReview {
@@ -14,7 +15,8 @@ public class ProductReview {
 
     @ManyToOne
     @JoinColumn(name = "customer_user_id")
-    private Customer author;
+   // private Customer author;
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -53,12 +55,12 @@ public class ProductReview {
         this.rating = rating;
     }
 
-    public Customer getAuthor() {
-        return author;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setAuthor(Customer author) {
-        this.author = author;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Product getProduct() {
@@ -74,8 +76,9 @@ public class ProductReview {
         return "ProductReview{" +
                 "review='" + review + '\'' +
                 ", rating=" + rating +
-                ", author=" + author +
+                ", author=" + customer +
                 ", product=" + product +
                 '}';
     }
+
 }

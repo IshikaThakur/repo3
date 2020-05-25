@@ -1,23 +1,31 @@
 package com.ecommerceApp.ecommerceApp.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
 
-public class Cart {
+@Entity
+public class Cart  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "CUSTOMER_USER_ID")
-    private Users users;
-    @Column(name = "QUANTITY")
+   // @Column(name = "QUANTITY")
     private Integer quantity;
-    @Column(name = "IS_WISHLIST_ITEM")
-    private Boolean is_wishlist_item;
+   // @Column(name = "IS_WISHLIST_ITEM")
+    private Boolean isWishlistItem;
 
-    @OneToOne
+  // @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PRODUCT_VARIATION_ID")
     private ProductVariation productVariation;
+
+  //  @OneToOne
+  //  @JoinColumn(name = "CUSTOMER_USER_ID")
+ //   private Users users;
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+     Customer customer;
+
+
 
     public Long getId() {
         return id;
@@ -27,13 +35,6 @@ public class Cart {
         this.id = id;
     }
 
-    public Users getUser() {
-        return users;
-    }
-
-    public void setUser(Users user) {
-        this.users = users;
-    }
 
     public Integer getQuantity() {
         return quantity;
@@ -43,13 +44,6 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public Boolean getIs_wishlist_item() {
-        return is_wishlist_item;
-    }
-
-    public void setIs_wishlist_item(Boolean is_wishlist_item) {
-        this.is_wishlist_item = is_wishlist_item;
-    }
 
     public ProductVariation getProductVariation() {
         return productVariation;
@@ -58,4 +52,20 @@ public class Cart {
     public void setProductVariation(ProductVariation productVariation) {
         this.productVariation = productVariation;
     }
-}
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Boolean getWishlistItem() {
+        return isWishlistItem;
+    }
+
+    public void setWishlistItem(Boolean wishlistItem) {
+        isWishlistItem = wishlistItem;
+    }
+    }

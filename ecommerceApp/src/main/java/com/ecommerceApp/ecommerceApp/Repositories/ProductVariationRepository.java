@@ -19,11 +19,19 @@ public interface ProductVariationRepository extends CrudRepository<ProductVariat
 
     @Modifying
     @Transactional
+
     @Query(value = "delete from product_variation where product_id = :p_id", nativeQuery = true)
     void deleteByProductId(@Param("p_id") Long p_id);
 
     @Query(value = "select name from product where id in (select product_id from product_variation where quantity_available=:0) and seller_user_id=:id;);", nativeQuery = true)
     public List<Object[]> outOfStockProducts(@Param(value = "id") Long id);
+
+    @Query(value = "select price from product_variation where id =:id",nativeQuery = true)
+    public Long getPrice(@Param(value = "id") Long id);
+
+    @Query(value = "select product_id from product_variation where id =:id",nativeQuery = true)
+    public Long getProductId(@Param(value = "id") Long id);
+
 
 
 }

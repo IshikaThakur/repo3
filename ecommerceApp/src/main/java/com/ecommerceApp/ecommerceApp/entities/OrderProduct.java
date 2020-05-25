@@ -7,16 +7,20 @@ public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "QUANTITY")
+   // @Column(name = "QUANTITY")
     private Integer quantity;
-    @Column(name = "PRICE")
+    //@Column(name = "PRICE")
     private Double price;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ORDER_ID")
+    private String productVariationMetaData;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
     private Orders orders;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PRODUCT_VARIATION_ID")
     private ProductVariation productVariation;
+
     @OneToOne(mappedBy = "orderProduct")
     private OrderStatus orderStatus;
 
@@ -50,6 +54,22 @@ public class OrderProduct {
 
     public void setOrders(Orders orders) {
         this.orders = orders;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getProductVariationMetaData() {
+        return productVariationMetaData;
+    }
+
+    public void setProductVariationMetaData(String productVariationMetaData) {
+        this.productVariationMetaData = productVariationMetaData;
     }
 
     public ProductVariation getProductVariation() {

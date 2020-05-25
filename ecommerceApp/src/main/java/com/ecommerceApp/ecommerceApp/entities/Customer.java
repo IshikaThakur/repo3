@@ -3,23 +3,26 @@ package com.ecommerceApp.ecommerceApp.entities;
 import com.ecommerceApp.ecommerceApp.security.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
+@Table(name = "customer")
+@PrimaryKeyJoinColumn(name = "user_id")
 public class Customer extends Users {
-
-
     private String contact;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<ProductReview> reviews;
 
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
-    private Set<Orders> orders;
+   // private Set<Order> order;
+    private List<Orders>orders;
+
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Cart cart;
+
 
     public Customer() {
         this.addRole(new Role( 3l,"ROLE_CUSTOMER"));
@@ -55,7 +58,23 @@ public class Customer extends Users {
 
             reviews.add(review);
 
-            review.setAuthor(this);
+            review.setCustomer(this);
         }
+    }
+
+    public List<Orders> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Orders> orders) {
+        this.orders = orders;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

@@ -34,7 +34,7 @@ public class Product  extends Auditable<String> implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductVariation> variations;
-   @JsonIgnore
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -56,6 +56,12 @@ public class Product  extends Auditable<String> implements Serializable {
         this.name = name;
         this.description = description;
         this.brand = brand;
+    }
+
+    public Product(Long id,String name,String brand) {
+      this.id=id;
+      this.name=name;
+      this.brand=brand;
     }
 
     public Long getId() {

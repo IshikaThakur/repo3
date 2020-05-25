@@ -23,8 +23,8 @@ public class ProductAndCategoryRedisRepoImpl implements ProductRedisRepository {
     }
 
     @Override
-    public Map<String, Product> findAll() {
-        return hashOperations.entries("customer");
+    public Map<Long, Product> findAll() {
+        return hashOperations.entries("product");
     }
 
     @Override
@@ -37,4 +37,9 @@ public class ProductAndCategoryRedisRepoImpl implements ProductRedisRepository {
         hashOperations.delete("product", id);
     }
 
+    @Override
+    public void update(Product product) {
+ // hashOperations.put("product",product.getId(),product);
+        save(product);
+    }
 }
