@@ -1,5 +1,6 @@
 package com.ecommerceApp.ecommerceApp.controller;
 
+import com.ecommerceApp.ecommerceApp.rabbitMQ.AMQPProducer;
 import com.ecommerceApp.ecommerceApp.services.OrderService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.security.Principal;
 public class OrdersController {
     @Autowired
     OrderService orderService;
+    @Autowired
+    AMQPProducer amqpProducer;
 
     @ApiOperation("to place order")
     @GetMapping("/customer/placeOrder/{productVariationId}/{quantity}/{paymentMethod}/{AddressId}")

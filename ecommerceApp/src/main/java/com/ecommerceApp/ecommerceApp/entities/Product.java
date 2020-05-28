@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Entity
 
-public class Product  extends Auditable<String> implements Serializable {
+public class Product  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +62,10 @@ public class Product  extends Auditable<String> implements Serializable {
       this.id=id;
       this.name=name;
       this.brand=brand;
+    }
+
+    public Product(String productName, String brand, Boolean isCancellable, Boolean isReturnable, String description, boolean isActive) {
+        super();
     }
 
     public Long getId() {

@@ -13,10 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 import javax.persistence.metamodel.SingularAttribute;
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public interface ProductRepository extends CrudRepository<Product,Long> {
 
@@ -35,7 +32,7 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "delete from product where id = :p_id", nativeQuery = true)
+    @Query(value = "delete from Product where id = :p_id", nativeQuery = true)
     void deleteProductById(@Param("p_id") Long p_id);
 
     @Query(value = "select name,brand from Product where CURRENT_DATE = :(CAST(createdDate() AS date))", nativeQuery = true)
@@ -43,5 +40,11 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
 
    @Query(value = "Select Product.name,Users.email,Product.brand,CATEGORY.name as category from Product INNER JOIN Users ON Product.seller_user_id =Users.id INNER JOIN CATEGORY ON Product.category_id =CATEGORY.id ",nativeQuery = true)
    public List<Object[]> getProducts();
+
+    @Query(value = "select id from Product where category_id=:category_id and brand=:brand",nativeQuery = true)
+    List<Long> getIdOfSimilarProduct(@Param("category_id")Long id, @Param("brand") String brand, Pageable paging);
+
+    @Query(value = "select category_id from Product where id=:id", nativeQuery = true)
+    Long getCategoryId(@Param("id") Long productId);
 
 }

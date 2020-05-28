@@ -110,12 +110,12 @@ public class ProductVariationService {
         Optional<ProductVariation> savedVariation = productVariationRepository.findById(id);
         if (!savedVariation.isPresent()) {
 
-            return new ResponseEntity("Success", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Not Found", HttpStatus.NOT_FOUND);
         }
         ProductVariation variation = savedVariation.get();
         if (!variation.getProduct().getSeller().getEmail().equalsIgnoreCase(email)) {
             message = "Product variation with id " + id + " does not belong to you.";
-            return new ResponseEntity("Success", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Id does not belongs to you", HttpStatus.BAD_REQUEST);
         }
         if (variation.isDeleted()) {
             message = "Product Variation does not exist.";

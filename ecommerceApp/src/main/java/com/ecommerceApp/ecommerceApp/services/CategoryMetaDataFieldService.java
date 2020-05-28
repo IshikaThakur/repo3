@@ -1,9 +1,11 @@
 package com.ecommerceApp.ecommerceApp.services;
 
 import com.ecommerceApp.ecommerceApp.Repositories.CategoryMetadataFieldRepository;
+import com.ecommerceApp.ecommerceApp.Repositories.CategoryRepository;
 import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryMetadataFieldDto;
 import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataField;
+import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataFieldValues;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,8 @@ public class CategoryMetaDataFieldService {
     CategoryMetadataFieldRepository categoryFieldRepository;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     CategoryMetadataField toCategoryMetadataField(CategoryMetadataFieldDto categoryMetadataFieldDto) {
         if (categoryMetadataFieldDto == null)
@@ -70,6 +74,7 @@ public class CategoryMetaDataFieldService {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
 
     }
+
 
 
 }

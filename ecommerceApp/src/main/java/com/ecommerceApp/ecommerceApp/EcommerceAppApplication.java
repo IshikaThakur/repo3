@@ -2,10 +2,11 @@ package com.ecommerceApp.ecommerceApp;
 
 import com.ecommerceApp.ecommerceApp.auditing.SpringSecurityAuditorAware;
 import com.ecommerceApp.ecommerceApp.entities.Product;
+import com.ecommerceApp.ecommerceApp.rabbitMQ.RabbitMQProperties;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableAsync
 @EnableScheduling
 @EnableCaching
+@EnableConfigurationProperties(RabbitMQProperties.class)
 public class EcommerceAppApplication {
 
 	@Bean
@@ -76,8 +78,6 @@ public class EcommerceAppApplication {
 		redisTemplate.setConnectionFactory(jedisConnectionFactory());
 		return redisTemplate;
 	}
-
-
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceAppApplication.class, args);

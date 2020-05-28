@@ -3,6 +3,7 @@ package com.ecommerceApp.ecommerceApp.controller;
 import com.ecommerceApp.ecommerceApp.dtos.BaseDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
+import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataFieldValues;
 import com.ecommerceApp.ecommerceApp.services.CategoryMetaDataFieldService;
 import com.ecommerceApp.ecommerceApp.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,7 +33,7 @@ public class CategoryController {
     }
 
     //===================adding metadata fields===================
-    @PostMapping("/admin/metadata-fields")
+    @PostMapping("admin/add/metadata-fields")
     public ResponseEntity addMetaDataField(@RequestParam String fieldName) {
         return categoryMetaDataFieldService.addNewMetadataField(fieldName);
     }
@@ -61,5 +63,8 @@ public class CategoryController {
         return categoryService.getAll();
     }
 
-
+    @PostMapping(value = "/admin/metadatavalues/{categoryId}/{fieldId}",produces = "application/json")
+    public ResponseEntity addMetadataWithValues(@Valid @RequestBody CategoryMetadataFieldValues values, @PathVariable Long categoryId, @PathVariable Long fieldId){
+        return categoryService.addValues(values,categoryId,fieldId);
+    }
 }

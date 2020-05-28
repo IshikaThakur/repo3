@@ -12,12 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 @Controller
 public class JobController {
@@ -26,7 +22,6 @@ public class JobController {
     private Scheduler scheduler;
     @Autowired
     private ApplicationContext context;
-
     @Autowired
     ProductService productService;
     @Autowired
@@ -53,9 +48,9 @@ public class JobController {
         return new ResponseEntity("Your task is in progress......", HttpStatus.OK);
     }
 
-@GetMapping(value="admin/schedule/trigger2")
-public ResponseEntity schedulenew()
-{
-    productService.getRep();
-    return new ResponseEntity("Your task is in progress",HttpStatus.OK);
-}}
+    @GetMapping(value = "admin/schedule/trigger2")
+    public ResponseEntity schedulenew() {
+        productService.getRep();
+        return new ResponseEntity("Your task is in progress", HttpStatus.OK);
+    }
+}

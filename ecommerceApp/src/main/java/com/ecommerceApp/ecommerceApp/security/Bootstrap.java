@@ -132,6 +132,7 @@ public class Bootstrap implements ApplicationRunner {
         order1.setDateCreated(new Date());
         order1.setPaymentMethod("Cash on Delivery");
         order1.setId(2009992L);
+        order1.setAmountPaid(120000L);
         Customer custom = customerRepository.findByEmail("customer@ttn.com");
         order1.setCustomer(custom);
         order1.setOrderAddress(new OrderAddress(new Address("Gomti Nagar", "Lucknow", "U.P.", "23457L", "India", "home")));

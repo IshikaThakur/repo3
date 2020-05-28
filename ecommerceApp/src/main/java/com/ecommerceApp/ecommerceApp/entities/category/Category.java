@@ -1,8 +1,8 @@
 package com.ecommerceApp.ecommerceApp.entities.category;
 
 
-
 import com.ecommerceApp.ecommerceApp.entities.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,17 +19,17 @@ public class Category implements Serializable {
     private String name;
 
     private boolean isDeleted = false;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Product> products;
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Category> subCategories;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<CategoryMetadataFieldValues> fieldValues;
 
@@ -99,9 +99,9 @@ public class Category implements Serializable {
         this.fieldValues = fieldValues;
     }
 
-    public void addSubCategory(Category category){
-        if(category != null){
-            if(subCategories == null)
+    public void addSubCategory(Category category) {
+        if (category != null) {
+            if (subCategories == null)
                 subCategories = new HashSet<>();
 
             subCategories.add(category);
@@ -109,9 +109,9 @@ public class Category implements Serializable {
         }
     }
 
-    public void addProduct(Product product){
-        if(product != null){
-            if(products == null)
+    public void addProduct(Product product) {
+        if (product != null) {
+            if (products == null)
                 products = new HashSet<Product>();
 
             products.add(product);
@@ -120,9 +120,9 @@ public class Category implements Serializable {
         }
     }
 
-    public void addFieldValues(CategoryMetadataFieldValues fieldValue){
-        if(fieldValue != null){
-            if(fieldValues==null)
+    public void addFieldValues(CategoryMetadataFieldValues fieldValue) {
+        if (fieldValue != null) {
+            if (fieldValues == null)
                 fieldValues = new HashSet<>();
 
             fieldValues.add(fieldValue);

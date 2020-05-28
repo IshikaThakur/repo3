@@ -8,6 +8,7 @@ import com.ecommerceApp.ecommerceApp.dtos.ErrorDto;
 import com.ecommerceApp.ecommerceApp.dtos.ResponseDto;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
+import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataFieldValues;
 import com.ecommerceApp.ecommerceApp.exceptions.CategoryAlreadyRegisteredException;
 import com.ecommerceApp.ecommerceApp.exceptions.InvalidDetailException;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.naming.NameNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -102,14 +104,36 @@ public class CategoryService {
 
     //=========================View All Categories=============================
     public List<CategoryDto> getAll() {
-        List<Category> categoryList = categoryRepository.findAll(PageRequest.of(0, 5,
-                Sort.Direction.ASC, "id"));
+        List<Category> categoryList = categoryRepository.findAll();
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryList.forEach(categoryDto -> categoryDtoList.add(new CategoryDto(categoryDto.getId(),
                 categoryDto.getName())));
         return categoryDtoList;
     }
 //==================================================
+//List<Category> categoryList = categoryRepository.findAll(PageRequest.of(0, 5,
+    //    Sort.Direction.ASC, "id"));
+public ResponseEntity addValues(CategoryMetadataFieldValues values, Long categoryId, Long fieldId) {
+    if (!categoryRepository.findById(categoryId).isPresent()) {
+        throw new InvalidDetailException("Invalid Category Id, Does Not Exists In Database");
+    }
+    if (!categoryFieldRepository.findById(fieldId).isPresent()) {
+        throw new InvalidDetailException("Invalid MetaDataField Id, Does Not Exists In Database");
+    }
+    try {
+        CategoryMetadataFieldValues newMetaDataFieldValues = new CategoryMetadataFieldValues(
+                categoryFieldRepository.findById(fieldId).get(),
+                categoryRepository.findById(categoryId).get(),
+                values.getValue());
+       // System.out.println(values.getMetadataValues());
+        categoryMetadaFieldValuesRepository.save(newMetaDataFieldValues);
+    } catch (Exception ex) {
+        throw new InvalidDetailException("Invalid Product Category Id or Metadata Field Id");
+    }
+    return new ResponseEntity("Created",HttpStatus.OK);
+}
+
+
 
 
 }

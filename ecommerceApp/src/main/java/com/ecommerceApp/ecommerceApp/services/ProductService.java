@@ -2,6 +2,7 @@ package com.ecommerceApp.ecommerceApp.services;
 
 import com.ecommerceApp.ecommerceApp.Repositories.*;
 import com.ecommerceApp.ecommerceApp.criteria.ProductRepositoryCustom;
+import com.ecommerceApp.ecommerceApp.dtos.ViewProductDtoforCustomer;
 import com.ecommerceApp.ecommerceApp.dtos.categorydtos.CategoryDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminDto;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductAdminViewDto;
@@ -11,6 +12,7 @@ import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
+import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataField;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -63,6 +66,10 @@ public class ProductService {
     ReportRepository reportRepository;
     @Autowired
     ProductRepositoryCustom productRepositoryCustom;
+    @Autowired
+    CategoryMetadaFieldValuesRepository categoryMetadaFieldValuesRepository;
+    @Autowired
+    CategoryMetadataFieldRepository categoryMetadataFieldRepository;
 
 
     public Product toProduct(ProductSellerDto productSellerDto) {
@@ -201,8 +208,10 @@ public class ProductService {
         if (product.isDeleted()) {
             return new ResponseEntity<>("Product does not exist", HttpStatus.NOT_FOUND);
         }
+
         //productRepository.deleteById(id);
         productRepository.deleteProductById(id);
+        product.setDeleted(true);
         //return new ResponseEntity<>("deleted", HttpStatus.OK);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-product-deleted", null, LocaleContextHolder.getLocale()));
@@ -332,6 +341,7 @@ public class ProductService {
     }
     //=============Get list of product for admin
 
+
     public ResponseEntity getAllProductsForAdmin(Long categoryId, String offset, String size, String sortByField, String order, String brand) {
 
         Pageable pageable = pagingService.getPageableObject(offset, size, sortByField, order);
@@ -413,6 +423,54 @@ public class ProductService {
         }
 
         return null;
+    }
+
+    public List<ViewProductDtoforCustomer> getSimilarProducts(Long productId, Integer pageNo, Integer pageSize, String sortBy) {
+        Optional<Product> product = productRepository.findById(productId);
+        Long[] l1 = {};
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Order.asc(sortBy)));
+        List<ViewProductDtoforCustomer> list = new ArrayList<>();
+
+        if (product.isPresent()) {
+            List<Long> longList = productRepository.getIdOfSimilarProduct(product.get().getCategory().getId(), product.get().getBrand(), paging);
+            System.out.println(longList);
+            for (Long l : longList) {
+                list.add(viewSingleProductForCustomer(productRepository.findById(l).get().getId()));
+            }
+            return list;
+
+        } else {
+            throw new ProductNotFoundException("Not Found");
+        }
+    }
+
+    public ViewProductDtoforCustomer viewSingleProductForCustomer(Long productId) {
+        Optional<Product> product = productRepository.findById(productId);
+        if (product.isPresent()) {
+            ViewProductDtoforCustomer viewProductDTO = new ViewProductDtoforCustomer();
+            viewProductDTO.setBrand(product.get().getBrand());
+            viewProductDTO.setActive(product.get().isActive());
+            viewProductDTO.setCancellable(product.get().isCancelleable());
+            viewProductDTO.setDescription(product.get().getDescription());
+            viewProductDTO.setProductName(product.get().getName());
+            Optional<Category> category = categoryRepository.findById(productRepository.getCategoryId(productId));
+            viewProductDTO.setName(category.get().getName());
+           /* List<Long> longList1 = categoryMetadaFieldValuesRepository.getMetadataId(category.get().getId());
+            List<String> fields = new ArrayList<>();
+            List<String> values = new ArrayList<>();
+            for (Long l1 : longList1) {
+                Optional<CategoryMetadataField> categoryMetadataField = categoryMetadataFieldRepository.findById(l1);
+                fields.add(categoryMetadataField.get().getName());
+                values.add(categoryMetadaFieldValuesRepository.getFieldValuesForCompositeKey(category.get().getId(), l1));
+
+            }*/
+           // viewProductDTO.setFieldName(fields);
+          //  viewProductDTO.setValues(values);
+            return viewProductDTO;
+
+        } else {
+            throw new ProductNotFoundException("Not Found");
+        }
     }
 
 }

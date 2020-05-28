@@ -1,9 +1,10 @@
 package com.ecommerceApp.ecommerceApp.entities.category;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class CategoryMetadataFieldValues {
+public class CategoryMetadataFieldValues implements Serializable {
     @EmbeddedId
     private CategoryMetadataFieldValuesId id = new CategoryMetadataFieldValuesId();
 
@@ -24,6 +25,9 @@ public class CategoryMetadataFieldValues {
 
     public CategoryMetadataFieldValues() {
 
+    }
+
+    public CategoryMetadataFieldValues(CategoryMetadataField categoryMetadataField, Category category, String value) {
     }
 
     public CategoryMetadataFieldValuesId getId() {
@@ -67,6 +71,8 @@ public class CategoryMetadataFieldValues {
                 ", values='" + value + '\'' +
                 '}';
     }
+
+
 }
 
 

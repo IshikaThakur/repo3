@@ -1,6 +1,7 @@
 package com.ecommerceApp.ecommerceApp.controller;
 
 import com.ecommerceApp.ecommerceApp.criteria.ProductRepositoryCustom;
+import com.ecommerceApp.ecommerceApp.dtos.ViewProductDtoforCustomer;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.services.ProductService;
@@ -87,15 +88,10 @@ public class ProductController {
         return productService.getAllProductsForAdmin(categoryId, offset, size, sortByField, order, brand);
     }
 
-    /* @GetMapping("/customer/similar-products/{productId}")
-     public ResponseEntity getSimilarProductsByProductIdForCustomer(@PathVariable Long productId,
-                                                                            @RequestParam(defaultValue = "0") String offset,
-                                                                            @RequestParam(defaultValue = "10") String size,
-                                                                            @RequestParam(defaultValue = "id") String sortByField,
-                                                                            @RequestParam(defaultValue = "ascending") String order){
-
-         return productService.getAllSimilarProductsByProductId(productId, offset, size, sortByField, order);
-     }*/
+    @GetMapping("/customer/similar-products/{productId}")
+    public List<ViewProductDtoforCustomer> getSimilarProductsByProductIdForCustomer(@PathVariable Long productId, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer size, @RequestParam(defaultValue = "id") String sortByField) {
+        return productService.getSimilarProducts(productId, offset, size, sortByField);
+    }
     //=======================API to check report by admin=============================
     @GetMapping(value = "admin/get/report")
     public List<Report> getReport(@RequestParam(defaultValue = "0") String offset,
@@ -111,5 +107,6 @@ public class ProductController {
     public List<Report> getReports() {
         return productRepositoryCustom.createReport();
     }
-}
 
+
+}

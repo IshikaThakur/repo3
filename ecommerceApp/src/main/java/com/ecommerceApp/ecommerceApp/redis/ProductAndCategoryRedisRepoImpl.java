@@ -22,7 +22,7 @@ public class ProductAndCategoryRedisRepoImpl implements ProductRedisRepository {
         hashOperations.put("product", product.getId(), product);
     }
 
-    @Override
+
     public Map<Long, Product> findAll() {
         return hashOperations.entries("product");
     }

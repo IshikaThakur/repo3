@@ -108,7 +108,7 @@ public class SellerService {
 
            Seller seller = toSeller(sellerRegistrationDto);
         seller.setPassword(passwordEncoder.encode(seller.getPassword()));
-        seller.setEnabled(true);
+        seller.setEnabled(false);
         sellerRepository.save(seller);
         acknowledgementEmail(seller.getEmail());
         return "Account created successfully.";
@@ -262,6 +262,7 @@ public class SellerService {
 
        else if(sellerDto.isActive()!=true) {
             saveUser.setActive(true);
+            saveUser.setEnabled(true);
             userRepository.save(saveUser);
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setSubject("Account Activation");
