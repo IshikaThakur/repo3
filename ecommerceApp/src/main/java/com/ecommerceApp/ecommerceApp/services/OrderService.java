@@ -5,6 +5,10 @@ import com.ecommerceApp.ecommerceApp.exceptions.AddressNotFoundException;
 import com.ecommerceApp.ecommerceApp.exceptions.OutOfStockException;
 import com.ecommerceApp.ecommerceApp.rabbitMQ.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,6 +29,8 @@ public class OrderService {
     @Autowired
     OrderProductRepository orderProductRepository;
     @Autowired
+    MessageSource messageSource;
+    @Autowired
     OrderStatusRepository orderStatusRepository;
     @Autowired
     RabbitMQListener rabbitMQListener;
@@ -36,50 +42,54 @@ public class OrderService {
     AMQPProducer amqpProducer;
 
 
-    public void placeOrder(Long productVariationId, int quantity, String paymentMethod, Long addressId, String email) {
+    public ResponseEntity placeOrder(Long productVariationId, int quantity, String paymentMethod, Long addressId, String email) {
+        ResponseEntity responseEntity;
         Customer customer = customerRepository.findByEmail(email);
         Optional<ProductVariation> productVariationOptional = productVariationRepository.findById(productVariationId);
         ProductVariation productVariation = productVariationOptional.get();
-        int quantity_Available = productVariation.getQuantityAvailable();
-        int quantityAvailable = quantity_Available-quantity;
-        if (quantityAvailable < 0) {
-           throw new OutOfStockException("Few Products Left ,You need to select in the the range "+quantity_Available);
-        }
-        productVariation.setQuantityAvailable(quantityAvailable);
-        productVariationRepository.save(productVariation);
 
         Optional<Address> addressOptional = addressRepository.findById(addressId);
         Address address = null;
         if (addressOptional.isPresent()) {
             address = addressOptional.get();
         } else {
-            throw new AddressNotFoundException("****************Specify Your Delievery Address*********");
+           return new ResponseEntity("Address with this ID doesn't exists,Please enter a valid Address",HttpStatus.BAD_REQUEST);
         }
+        int quantity_Available = productVariation.getQuantityAvailable();
+        int quantityAvailable = quantity_Available - quantity;
+        if (quantityAvailable < 0) {
+           return new ResponseEntity("Few Products Left ,You need to select in the the range ",HttpStatus.BAD_REQUEST);
+        }
+        productVariation.setQuantityAvailable(quantityAvailable);
+        productVariationRepository.save(productVariation);
+        double amountPaid = quantity * productVariation.getPrice();
         Orders orders = new Orders();
-       orders.setAmountPaid(productVariationRepository.getPrice(productVariationId));
         orders.setDateCreated(new Date());
         orders.setCustomer(customer);
         orders.setPaymentMethod(paymentMethod);
+        orders.setAmountPaid(amountPaid);
         orders.setOrderAddress(addressToOrderAddress(address));
 
-    OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setPrice((double) ((productVariationRepository.getPrice(productVariationId))*quantity));
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setPrice((double) ((productVariationRepository.getPrice(productVariationId)) * quantity));
         orderProduct.setOrders(orders);
         orderProduct.setProductVariationMetaData(String.valueOf(productVariation));
         orderProduct.setProductVariation(productVariation);
 
-    OrderStatus orderStatus= new OrderStatus();
+        OrderStatus orderStatus = new OrderStatus();
         orderStatus.setOrderProduct(orderProduct);
-    Optional<Product> productOptional=productRepository.findById(productVariationRepository.getProductId(productVariationId));
-    Product product=productOptional.get();
+        Optional<Product> productOptional = productRepository.findById(productVariationRepository.getProductId(productVariationId));
+        Product product = productOptional.get();
 
         orderRepository.save(orders);
         productVariationRepository.save(productVariation);
         orderProductRepository.save(orderProduct);
         addressRepository.save(address);
         customerRepository.save(customer);
-}
-
+        //return new ResponseEntity("***********ORDER PLACED********",HttpStatus.OK);
+        responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("message-order-placed", null, LocaleContextHolder.getLocale()));
+        return responseEntity;
+    }
     OrderAddress addressToOrderAddress(Address address) {
         OrderAddress orderAddress = new OrderAddress();
         orderAddress.setAddressLine(address.getAddressLine());

@@ -10,7 +10,7 @@ public class Orders implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ids;
-    private Long amountPaid;
+    private Double amountPaid;
     @Temporal(TemporalType.DATE)
     private Date dateCreated;
     private String paymentMethod;
@@ -41,11 +41,11 @@ public class Orders implements Serializable {
         this.ids = id;
     }
 
-    public Long getAmountPaid() {
+    public Double getAmountPaid() {
         return amountPaid;
     }
 
-    public void setAmountPaid(Long amountPaid) {
+    public void setAmountPaid(Double amountPaid) {
         this.amountPaid = amountPaid;
     }
 
