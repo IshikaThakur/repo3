@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,12 +19,17 @@ public class Report {
     private String brand;
     private String sellername;
     private String categoryName;
+    private Date createdDate;
 
     public Report() {
+        createdDate = new Date();
     }
 
     public Report(String toString) {
+
+
     }
+
 
 
     public String getProductname() {
@@ -64,6 +70,15 @@ public class Report {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
 

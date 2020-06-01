@@ -11,7 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractAuditable_.createdDate;
 
 @Repository
 public class ProductRepositoryCustom {
@@ -35,12 +38,14 @@ public class ProductRepositoryCustom {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Report> query = builder.createQuery(Report.class);
         Root<Report> root = query.from(Report.class);
+       // predicates.add(builder.lessThanOrEqualTo(root.<Date>get("dateCreated"),createdDate));
         query.select(root);
         Query<Report> q= (Query<Report>) entityManager.createQuery(query);
+
         List<Report> reports=q.getResultList();
-        for (Report report : reports) {
+        /*for (Report report : reports) {
             System.out.println(report.getBrand()+" "+report.getProductname()+" "+report.getSellername());
-        }
+        }*/
         return reports;
     }
 

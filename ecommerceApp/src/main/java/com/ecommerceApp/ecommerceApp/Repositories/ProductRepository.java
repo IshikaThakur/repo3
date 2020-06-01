@@ -2,6 +2,7 @@ package com.ecommerceApp.ecommerceApp.Repositories;
 
 import com.ecommerceApp.ecommerceApp.entities.Customer;
 import com.ecommerceApp.ecommerceApp.entities.Product;
+import org.aspectj.weaver.patterns.Declare;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.AbstractAuditable;
@@ -13,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 
 import javax.persistence.metamodel.SingularAttribute;
 import javax.transaction.Transactional;
+import javax.validation.constraintvalidation.SupportedValidationTarget;
 import java.util.*;
 
 public interface ProductRepository extends CrudRepository<Product,Long> {
@@ -46,5 +48,6 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
 
     @Query(value = "select category_id from Product where id=:id", nativeQuery = true)
     Long getCategoryId(@Param("id") Long productId);
+
 
 }

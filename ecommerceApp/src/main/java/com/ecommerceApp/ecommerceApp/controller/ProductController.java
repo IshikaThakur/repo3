@@ -103,8 +103,8 @@ public class ProductController {
     }
 
     //=======================Application of criteria Query to fetch report========
-    @GetMapping(value = "admin/get/reports")
-    public List<Report> getReports() {
+    @GetMapping(value = "product/get/reports/{id}")
+    public List<Report> getReports(@PathVariable Long id) {
         return productRepositoryCustom.createReport();
     }
 
