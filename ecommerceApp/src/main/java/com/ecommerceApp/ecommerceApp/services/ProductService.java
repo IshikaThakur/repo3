@@ -405,7 +405,7 @@ public class ProductService {
     }
 
     // @Scheduled(initialDelay = 40000,fixedRate = 50000)
-    @Async
+
     public List<Report> getRep() {
 
         List<Object[]> products = productRepository.getProducts();
@@ -417,6 +417,7 @@ public class ProductService {
             report.setSellername(values[1].toString());
             report.setBrand(values[2].toString());
             report.setCategoryName(values[3].toString());
+            report.setStatus(1);
             reportRepository.save(report);
 
 

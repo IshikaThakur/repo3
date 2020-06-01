@@ -1,5 +1,6 @@
 package com.ecommerceApp.ecommerceApp.scheduler;
 
+import com.ecommerceApp.ecommerceApp.Repositories.ReportRepository;
 import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.services.ProductService;
@@ -17,6 +18,8 @@ import java.util.List;
 public class Tasks {
     @Autowired
     ProductService productService;
+    @Autowired
+    ReportRepository reportRepository;
     public void work()
     {
        /* CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -34,8 +37,5 @@ public class Tasks {
        System.out.println("hiiiiiii");
     }
 
-    public void getData()
-    {
 
-    }
 }

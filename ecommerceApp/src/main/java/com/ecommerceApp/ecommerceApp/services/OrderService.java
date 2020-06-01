@@ -2,6 +2,7 @@ package com.ecommerceApp.ecommerceApp.services;
 
 import com.ecommerceApp.ecommerceApp.Repositories.*;
 import com.ecommerceApp.ecommerceApp.entities.*;
+import com.ecommerceApp.ecommerceApp.exceptions.AddressNotFoundException;
 import com.ecommerceApp.ecommerceApp.exceptions.OutOfStockException;
 import com.ecommerceApp.ecommerceApp.rabbitMQ.AMQPConfig;
 import com.ecommerceApp.ecommerceApp.rabbitMQ.AMQPProducer;
@@ -59,7 +60,7 @@ public class OrderService {
         if (addressOptional.isPresent()) {
             address = addressOptional.get();
         } else {
-            return new ResponseEntity("Address with this ID doesn't exists,Please enter a valid Address", HttpStatus.BAD_REQUEST);
+       throw new AddressNotFoundException("Address with this id doesn't exists");
         }
          try {
              int quantity_Available = productVariation.getQuantityAvailable();

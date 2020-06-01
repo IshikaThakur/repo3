@@ -2,24 +2,25 @@ package com.ecommerceApp.ecommerceApp.entities;
 
 import org.hibernate.annotations.GeneratorType;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Report {
+public class Report implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String productname;
     private String brand;
     private String sellername;
     private String categoryName;
+    @Temporal(TemporalType.TIME)
     private Date createdDate;
+    private int Status;
+
 
     public Report() {
         createdDate = new Date();
@@ -64,14 +65,13 @@ public class Report {
         this.categoryName = categoryName;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
-
 
     public Date getCreatedDate() {
         return createdDate;
@@ -79,6 +79,14 @@ public class Report {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int status) {
+        Status = status;
     }
 }
 

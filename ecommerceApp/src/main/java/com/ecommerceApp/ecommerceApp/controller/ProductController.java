@@ -5,6 +5,7 @@ import com.ecommerceApp.ecommerceApp.dtos.ViewProductDtoforCustomer;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.services.ProductService;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -103,8 +104,8 @@ public class ProductController {
     }
 
     //=======================Application of criteria Query to fetch report========
-    @GetMapping(value = "product/get/reports/{id}")
-    public List<Report> getReports(@PathVariable Long id) {
+    @GetMapping(value = "product/get/reports")
+    public List<Report> getReports() {
         return productRepositoryCustom.createReport();
     }
 

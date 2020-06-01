@@ -38,11 +38,11 @@ public class ProductRepositoryCustom {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Report> query = builder.createQuery(Report.class);
         Root<Report> root = query.from(Report.class);
-       // predicates.add(builder.lessThanOrEqualTo(root.<Date>get("dateCreated"),createdDate));
         query.select(root);
+
         Query<Report> q= (Query<Report>) entityManager.createQuery(query);
 
-        List<Report> reports=q.getResultList();
+       List<Report> reports=q.getResultList();
         /*for (Report report : reports) {
             System.out.println(report.getBrand()+" "+report.getProductname()+" "+report.getSellername());
         }*/
