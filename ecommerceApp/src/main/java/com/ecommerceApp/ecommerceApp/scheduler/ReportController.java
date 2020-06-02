@@ -22,9 +22,9 @@ public class ReportController {
         return new ResponseEntity("Your task is in progress", HttpStatus.OK);
     }
 
-@GetMapping(value = "product/gets/{id}")
-    public <Optional> ResponseEntity<Report> getDetail(@PathVariable Long id) throws InterruptedException {
-    return reportService.getData(id);
+@GetMapping(value = "product/gets")
+    public ResponseEntity<Report> getData() {
+    return reportService.getData();
 }
 
 }

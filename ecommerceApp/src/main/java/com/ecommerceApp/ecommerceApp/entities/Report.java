@@ -1,11 +1,10 @@
 package com.ecommerceApp.ecommerceApp.entities;
 
-import org.hibernate.annotations.GeneratorType;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 public class Report implements Serializable {
@@ -17,20 +16,11 @@ public class Report implements Serializable {
     private String brand;
     private String sellername;
     private String categoryName;
-    @Temporal(TemporalType.TIME)
-    private Date createdDate;
+
     private int Status;
-
-
     public Report() {
-        createdDate = new Date();
-    }
-
-    public Report(String toString) {
-
 
     }
-
 
 
     public String getProductname() {
@@ -73,13 +63,6 @@ public class Report implements Serializable {
         this.id = id;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
 
     public int getStatus() {
         return Status;

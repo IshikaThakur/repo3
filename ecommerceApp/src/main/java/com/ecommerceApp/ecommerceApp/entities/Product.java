@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 
@@ -22,6 +19,9 @@ public class Product  implements Serializable {
     private String name;
     private String description;
     private String brand;
+
+    @Temporal(TemporalType.TIME)
+    private Date createdTime;
 
     private boolean isReturnable=true;
     private boolean isCancelleable=true;
@@ -48,16 +48,17 @@ public class Product  implements Serializable {
         isReturnable = true;
         isDeleted = false;
     }
-
-    public Product() {
+    public Product(){
+        createdTime = new Date();
     }
 
-    public Product(String name, String description, String brand) {
+
+    public Product(String name, String description, String brand){
         this.name = name;
         this.description = description;
         this.brand = brand;
-    }
 
+}
     public Product(Long id,String name,String brand) {
       this.id=id;
       this.name=name;
@@ -162,6 +163,14 @@ public class Product  implements Serializable {
 
     public void setReviews(List<ProductReview> reviews) {
         this.reviews = reviews;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public void addVariation(ProductVariation variation) {

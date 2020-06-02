@@ -2,6 +2,7 @@ package com.ecommerceApp.ecommerceApp.Repositories;
 
 import com.ecommerceApp.ecommerceApp.entities.Customer;
 import com.ecommerceApp.ecommerceApp.entities.Product;
+import com.ecommerceApp.ecommerceApp.entities.Report;
 import org.aspectj.weaver.patterns.Declare;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
     @Query(value = "select name,brand from Product where CURRENT_DATE = :(CAST(createdDate() AS date))", nativeQuery = true)
     List<Product> findAllWithCreationDate();
 
-   @Query(value = "Select Product.name,Users.email,Product.brand,CATEGORY.name as category from Product INNER JOIN Users ON Product.seller_user_id =Users.id INNER JOIN CATEGORY ON Product.category_id =CATEGORY.id ",nativeQuery = true)
+   @Query(value = "Select Product.name,Users.email,Product.brand,CATEGORY.name as category from Product INNER JOIN Users ON Product.seller_user_id =Users.id INNER JOIN CATEGORY ON Product.category_id =CATEGORY.id where createdTime BETWEEN '09:00:00' AND '23:59:00' ",nativeQuery = true)
    public List<Object[]> getProducts();
 
     @Query(value = "select id from Product where category_id=:category_id and brand=:brand",nativeQuery = true)
@@ -49,5 +50,6 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
     @Query(value = "select category_id from Product where id=:id", nativeQuery = true)
     Long getCategoryId(@Param("id") Long productId);
 
-
+    @Query(value = "select * from Product where id =:id and createdDate BETWEEN '09:00:00' AND '23:59:00'", nativeQuery = true)
+    Optional<Report> getReportById(@Param("id")Long id);
 }
