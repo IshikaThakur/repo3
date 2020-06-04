@@ -2,7 +2,9 @@ package com.ecommerceApp.ecommerceApp.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,7 +20,7 @@ public class Report implements Serializable {
     private String categoryName;
 
     @OneToMany(mappedBy = "report", fetch = FetchType.EAGER)
-    private Set<Product> products;
+    private List<Product> products;
 
 
     private int Status;
@@ -76,11 +78,11 @@ public class Report implements Serializable {
         Status = status;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 
@@ -90,6 +92,16 @@ public class Report implements Serializable {
 
     public void setReport_id(Long report_id) {
         this.report_id = report_id;
+    }
+    public void addProduct(Product product) {
+        if (product != null) {
+            if (products == null)
+                products = new ArrayList<>();
+
+            products.add(product);
+
+            product.setReport(this);
+        }
     }
 }
 

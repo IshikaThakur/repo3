@@ -20,7 +20,7 @@ public class ReportController {
     ReportService reportService;
     @RequestMapping(value = "product/get", method = RequestMethod.GET)
     public ResponseEntity start() throws Exception {
-      tasks.work();
+    reportService.addNewProduct();
         return new ResponseEntity("Your task is in progress", HttpStatus.OK);
     }
     @GetMapping(value = "product/gets/{report_id}")

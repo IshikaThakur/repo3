@@ -16,4 +16,5 @@ public interface ReportRepository extends CrudRepository<Report, Long> {
     public List generateReport(@Param("report_id")Long report_id);
 
 
+
 }
