@@ -31,10 +31,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
@@ -407,23 +405,27 @@ public class ProductService {
     // @Scheduled(initialDelay = 40000,fixedRate = 50000)
 
     public List<Report> getRep() {
-
         List<Object[]> products = productRepository.getProducts();
-
+    Long l=0l;
         for (Object[] values : products) {
-            // System.out.println(values[0].toString() + " " + values[1].toString());
+             l=1L;
             Report report = new Report();
             report.setProductname(values[0].toString());
             report.setSellername(values[1].toString());
             report.setBrand(values[2].toString());
             report.setCategoryName(values[3].toString());
+            report.setReport_id(l);
             report.setStatus(1);
-            reportRepository.save(report);
 
+            reportRepository.save(report);
 
         }
 
+        l++;
+
+
         return null;
+
     }
 
     public List<ViewProductDtoforCustomer> getSimilarProducts(Long productId, Integer pageNo, Integer pageSize, String sortBy) {

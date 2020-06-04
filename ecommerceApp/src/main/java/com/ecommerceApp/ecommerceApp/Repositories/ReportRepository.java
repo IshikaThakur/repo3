@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface ReportRepository extends CrudRepository<Report, Long> {
 
     List<Report> findAll();
+    @Query(value = "Select brand,categoryName,productname,sellername from Report where report_id = :report_id",nativeQuery = true)
+    public List generateReport(@Param("report_id")Long report_id);
 
 
 }

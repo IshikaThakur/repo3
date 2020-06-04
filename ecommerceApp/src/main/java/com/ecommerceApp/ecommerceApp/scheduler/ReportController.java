@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ReportController {
 @Autowired
@@ -18,13 +20,13 @@ public class ReportController {
     ReportService reportService;
     @RequestMapping(value = "product/get", method = RequestMethod.GET)
     public ResponseEntity start() throws Exception {
-        tasks.work();
+      tasks.work();
         return new ResponseEntity("Your task is in progress", HttpStatus.OK);
     }
+    @GetMapping(value = "product/gets/{report_id}")
+    public List generateReport(@PathVariable Long report_id) {
+        return reportRepository.generateReport(report_id);
+    }
 
-@GetMapping(value = "product/gets")
-    public ResponseEntity<Report> getData() {
-    return reportService.getData();
-}
 
 }

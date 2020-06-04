@@ -20,7 +20,7 @@ public class Product  implements Serializable {
     private String description;
     private String brand;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdTime;
 
     private boolean isReturnable=true;
@@ -41,6 +41,10 @@ public class Product  implements Serializable {
      @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductReview> reviews;
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "report_id")
+    private Report report;
 
     {
         isActive = true;
@@ -171,6 +175,14 @@ public class Product  implements Serializable {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Report getReport() {
+        return report;
+    }
+
+    public void setReport(Report report) {
+        this.report = report;
     }
 
     public void addVariation(ProductVariation variation) {
