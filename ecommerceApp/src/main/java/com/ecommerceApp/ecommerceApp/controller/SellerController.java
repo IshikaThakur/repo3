@@ -24,8 +24,8 @@ public class SellerController {
 
         return sellerService.getSellerProfile();
     }
-        @ApiOperation("To update seller profile")
-        @PostMapping("/seller/update/profile")
+    @ApiOperation("To update seller profile")
+    @PostMapping("/seller/update/profile")
     public ResponseEntity updateProfileDetails(@RequestBody SellerViewProfileDto profileDto, HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         String username = principal.getName();

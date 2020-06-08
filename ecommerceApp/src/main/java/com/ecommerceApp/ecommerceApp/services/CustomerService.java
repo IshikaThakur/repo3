@@ -281,18 +281,5 @@ public class CustomerService {
         }
     }
 
- /*   @Transactional
-    public ResponseEntity deleteAddress(String email, Long id) {
 
-        Optional<Address> optAddress = addressRepository.findById(id);
-        if (!optAddress.isPresent()) {
-            return new ResponseEntity("Not present", HttpStatus.NOT_FOUND);
-        }
-        Address savedAddress = optAddress.get();
-        if (savedAddress.getUser().getEmail().equals(email)) {
-            addressRepository.deleteAddressById(id);
-            return new ResponseEntity("Success", HttpStatus.OK);
-        }
-        return new ResponseEntity("already exists", HttpStatus.CONFLICT);
-    }*/
 }

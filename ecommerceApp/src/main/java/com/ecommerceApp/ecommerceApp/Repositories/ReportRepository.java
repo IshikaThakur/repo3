@@ -15,6 +15,9 @@ public interface ReportRepository extends CrudRepository<Report, Long> {
     @Query(value = "Select brand,categoryName,productname,sellername from Report where report_id = :report_id",nativeQuery = true)
     public List generateReport(@Param("report_id")Long report_id);
 
+    @Query(value = "select brand,productname,categoryName,sellername from Report where report_id =:report_id",nativeQuery = true)
+    List<Product> findAllPros(@Param("report_id")Long report_id);
+
 
 
 }

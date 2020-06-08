@@ -5,6 +5,7 @@ import com.ecommerceApp.ecommerceApp.dtos.ViewProductDtoforCustomer;
 import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.services.ProductService;
+import io.swagger.annotations.ApiOperation;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,25 +22,26 @@ public class ProductController {
     ProductService productService;
     @Autowired
     ProductRepositoryCustom productRepositoryCustom;
-
+   @ApiOperation(value = "to add a product by seller")
     @PostMapping("/seller/product/add")
     public ResponseEntity<String> createProduct(@Valid @RequestBody ProductSellerDto productSellerDto, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         String username = principal.getName();
         return productService.addProduct(username, productSellerDto);
     }
-
+   @ApiOperation(value = "To activate a product by admin ")
     @PutMapping("/product/activate/{id}")
     public ResponseEntity<String> activateProduct(@PathVariable Long id) {
         return productService.activateProductById(id);
     }
-
+    @ApiOperation(value = "To deactivate a product by admin ")
     @PutMapping("/product/deactivate/{id}")
     public ResponseEntity<String> deactivateProduct(@PathVariable Long id) {
         return productService.deactivateproductById(id);
     }
 
     //=============Api to delete the product by seller
+    @ApiOperation(value = "To dleete a product by seller")
     @DeleteMapping("/seller/product/{id}")
     public ResponseEntity<String> deleteProductById(@PathVariable Long id, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
@@ -48,12 +50,14 @@ public class ProductController {
     }
 
     //================API to get product by Id for Admin
+    @ApiOperation(value = "To view a product by admin")
     @GetMapping("/admin/product/{productId}")
     public ResponseEntity<String> getProductById(@PathVariable Long productId) {
         return productService.getProductById(productId);
     }
 
     //================API to get a product for seller=========
+    @ApiOperation(value = "To view a product by seller")
     @GetMapping("/seller/product/{id}")
     public ProductSellerDto getProductForSeller(@PathVariable Long id, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
@@ -62,6 +66,7 @@ public class ProductController {
     }
 
     //=========Updation of product seller===============================
+    @ApiOperation(value = "To update the product by seller")
     @PostMapping("/seller/product/update/{productId}")
     public String updateProductAsSeller(@PathVariable Long productId, @RequestBody ProductSellerDto productSellerDto) {
         productService.updateProduct(productId, productSellerDto);
@@ -69,6 +74,7 @@ public class ProductController {
     }
 
     //===============Get all products for seller=================
+    @ApiOperation(value = "to get all products by seller")
     @GetMapping("/seller/products")
     public ResponseEntity getAllProductsForSeller(@RequestParam(defaultValue = "0") String offset,
                                                   @RequestParam(defaultValue = "10") String size,
@@ -88,7 +94,7 @@ public class ProductController {
                                                  @RequestParam(required = false) String brand) {
         return productService.getAllProductsForAdmin(categoryId, offset, size, sortByField, order, brand);
     }
-
+    @ApiOperation(value = "To get similar products")
     @GetMapping("/customer/similar-products/{productId}")
     public List<ViewProductDtoforCustomer> getSimilarProductsByProductIdForCustomer(@PathVariable Long productId, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer size, @RequestParam(defaultValue = "id") String sortByField) {
         return productService.getSimilarProducts(productId, offset, size, sortByField);

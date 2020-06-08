@@ -44,8 +44,7 @@ public class Bootstrap implements ApplicationRunner {
     ProductVariationRepository productVariationRepository;
     @Autowired
     CartRepository cartRepository;
-    @Autowired
-    ReportsRepository reportsRepository;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -188,13 +187,6 @@ public class Bootstrap implements ApplicationRunner {
         cart.setProductVariation(lSize);
         cartRepository.save(cart);
 
-Reports reports=new Reports();
-        Map<String, String> attributes3 = new HashMap<>();
-        attributes3.put("brand","bull");
-        attributes3.put("seller","Rahul");
-        attributes3.put("product","shirt");
-      reports.setAttributes2(attributes3);
-      reportsRepository.save(reports);
 
 
 

@@ -22,7 +22,7 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @ApiOperation(value = "shows customer profile",notes="shows the profile for the logged in customer",authorizations = {@Authorization(value = "Bearer")})
+       @ApiOperation(value = "shows customer profile",notes="shows the profile for the logged in customer",authorizations = {@Authorization(value = "Bearer")})
         @GetMapping("/customer/view/profile")
             public CustomerViewProfileDto getprofile(HttpServletRequest request){
         Principal principal = request.getUserPrincipal();

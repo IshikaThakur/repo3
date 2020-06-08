@@ -11,6 +11,7 @@ import com.ecommerceApp.ecommerceApp.dtos.productdto.ProductSellerDto;
 import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
+import com.ecommerceApp.ecommerceApp.entities.Status;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
 import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataField;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
@@ -62,12 +63,15 @@ public class ProductService {
     PagingService pagingService;
     @Autowired
     ReportRepository reportRepository;
+
     @Autowired
     ProductRepositoryCustom productRepositoryCustom;
     @Autowired
     CategoryMetadaFieldValuesRepository categoryMetadaFieldValuesRepository;
     @Autowired
     CategoryMetadataFieldRepository categoryMetadataFieldRepository;
+    @Autowired
+    StatusRepository statusRepository;
 
 
     public Product toProduct(ProductSellerDto productSellerDto) {
@@ -125,7 +129,6 @@ public class ProductService {
         product.setCategory(category);
         product.setSeller(seller);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-
         mailMessage.setTo(seller.getEmail());
         mailMessage.setSubject("Information about the new product created");
         mailMessage.setFrom("tanu.thakur0816@gmail.com");
@@ -406,22 +409,23 @@ public class ProductService {
 
     public List<Report> getRep() {
         List<Object[]> products = productRepository.getProducts();
-    Long l=0l;
+        Status status=new Status();
+        Report report = new Report();
         for (Object[] values : products) {
-             l=1L;
-            Report report = new Report();
+
             report.setProductname(values[0].toString());
             report.setSellername(values[1].toString());
             report.setBrand(values[2].toString());
             report.setCategoryName(values[3].toString());
-            report.setReport_id(l);
-            report.setStatus(1);
 
-            reportRepository.save(report);
+           statusRepository.save(status);
+           reportRepository.save(report);
+
+
 
         }
 
-        l++;
+
 
 
         return null;

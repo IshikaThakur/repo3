@@ -2,6 +2,7 @@ package com.ecommerceApp.ecommerceApp.scheduler;
 
 import com.ecommerceApp.ecommerceApp.Repositories.ReportRepository;
 import com.ecommerceApp.ecommerceApp.entities.Report;
+import com.ecommerceApp.ecommerceApp.services.ProductService;
 import com.ecommerceApp.ecommerceApp.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +19,12 @@ public class ReportController {
     ReportRepository reportRepository;
 @Autowired
     ReportService reportService;
+@Autowired
+    ProductService productService;
     @RequestMapping(value = "product/get", method = RequestMethod.GET)
     public ResponseEntity start() throws Exception {
-    reportService.addNewProduct();
+
         return new ResponseEntity("Your task is in progress", HttpStatus.OK);
-    }
-    @GetMapping(value = "product/gets/{report_id}")
-    public List generateReport(@PathVariable Long report_id) {
-        return reportRepository.generateReport(report_id);
     }
 
 

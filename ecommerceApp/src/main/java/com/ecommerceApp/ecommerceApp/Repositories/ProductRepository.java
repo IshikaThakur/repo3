@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.keyvalue.repository.config.QueryCreatorType;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -41,19 +42,21 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
     @Query(value = "select name,brand from Product where CURRENT_DATE = :(CAST(createdDate() AS date))", nativeQuery = true)
     List<Product> findAllWithCreationDate();
 
-   @Query(value = "Select Product.name,Users.email,Product.brand,CATEGORY.name as category from Product INNER JOIN Users ON Product.seller_user_id =Users.id INNER JOIN CATEGORY ON Product.category_id =CATEGORY.id where cast(createdTime as date) =current_date() and cast(createdTime as time) BETWEEN '12:00:00' and '24:00:00'",nativeQuery = true)
-   public List<Object[]> getProducts();
+    @Query(value = "Select Product.name,Users.email,Product.brand,CATEGORY.name as category from Product INNER JOIN Users ON Product.seller_user_id =Users.id INNER JOIN CATEGORY ON Product.category_id =CATEGORY.id where cast(createdTime as date) =current_date() and cast(createdTime as time) BETWEEN '09:00:00' and '24:00:00'", nativeQuery = true)
+    public List<Object[]> getProducts();
 
 
-    @Query(value = "select id from Product where category_id=:category_id and brand=:brand",nativeQuery = true)
-    List<Long> getIdOfSimilarProduct(@Param("category_id")Long id, @Param("brand") String brand, Pageable paging);
+    @Query(value = "select id from Product where category_id=:category_id and brand=:brand", nativeQuery = true)
+    List<Long> getIdOfSimilarProduct(@Param("category_id") Long id, @Param("brand") String brand, Pageable paging);
 
     @Query(value = "select category_id from Product where id=:id", nativeQuery = true)
     Long getCategoryId(@Param("id") Long productId);
 
     @Query(value = "select * from Product where id =:id and createdDate BETWEEN '09:00:00' AND '15:59:00'", nativeQuery = true)
-    Optional<Report> getReportById(@Param("id")Long id);
+    Optional<Report> getReportById(@Param("id") Long id);
 
-    @Query(value = "Select brand from Product where cast(createdTime as date) =current_date() and cast(createdTime as time) BETWEEN '06:53:00' and '15:59:00'",nativeQuery = true)
-           List<Product> findByName();
+    @Query(value = "select * from Product where cast(createdTime as date)=current_date and cast(createdTime as time) BETWEEN '11:00:00' and '24:00:00'", nativeQuery = true)
+    List<Product> findAllProducts();
+
+
 }

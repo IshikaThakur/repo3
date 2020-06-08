@@ -32,10 +32,6 @@ public class AMQPConfig {
         return new TopicExchange(rabbitMQProperties.getExchangeName());
     }
 
-    /*@Bean
-    DirectExchange exchange() {
-        return new DirectExchange(rabbitMQProperties().getExchangeName());
-    }*/
 
     @Bean
     Binding binding(Queue queue, TopicExchange exchange) {

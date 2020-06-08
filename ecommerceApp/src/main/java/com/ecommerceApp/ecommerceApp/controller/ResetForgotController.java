@@ -21,7 +21,7 @@ public class ResetForgotController {
 
     }
     @ApiOperation("To reset the forgo password")
-@PostMapping(path = "/resetPassword/{token}")
+    @PostMapping(path = "/resetPassword/{token}")
     public String resetPassword(@Valid @RequestBody PasswordDto passwordDto,@PathVariable("token")String token )
 {
     return forgetAndResetPasswordService.resetPassword(passwordDto, token);

@@ -2,6 +2,7 @@ package com.ecommerceApp.ecommerceApp.controller;
 
 import com.ecommerceApp.ecommerceApp.dtos.CartDto;
 import com.ecommerceApp.ecommerceApp.services.CartService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.security.Principal;
 public class CartController {
     @Autowired
     CartService cartService;
+    @ApiOperation(value = "To add item in cart")
     @PostMapping("/customer/add/cart")
     public ResponseEntity addCartItem(@Valid @RequestBody CartDto cartDto, HttpServletRequest httpServletRequest)
     {

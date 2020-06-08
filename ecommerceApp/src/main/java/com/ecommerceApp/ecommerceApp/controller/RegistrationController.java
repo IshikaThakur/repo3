@@ -20,14 +20,14 @@ public class RegistrationController {
     CustomerService customerService;
     @Autowired
     SellerService sellerService;
-   @ApiOperation("Registration of customer")
+    @ApiOperation("Registration of customer")
     @PostMapping("/register/customer")
     ResponseEntity registerCustomer(@Valid @RequestBody CustomerRegistrationDto customerRegistrationDto) {
 
         return customerService.createNewCustomer(customerRegistrationDto);
     }
 
-  @GetMapping("register/confirm")
+    @GetMapping("register/confirm")
     String confirmRegistration(@RequestParam("token") String token) {
 
         return customerService.validateRegistrationToken(token);

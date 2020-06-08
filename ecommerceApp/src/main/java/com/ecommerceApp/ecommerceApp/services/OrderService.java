@@ -4,10 +4,7 @@ import com.ecommerceApp.ecommerceApp.Repositories.*;
 import com.ecommerceApp.ecommerceApp.entities.*;
 import com.ecommerceApp.ecommerceApp.exceptions.AddressNotFoundException;
 import com.ecommerceApp.ecommerceApp.exceptions.OutOfStockException;
-import com.ecommerceApp.ecommerceApp.rabbitMQ.AMQPConfig;
-import com.ecommerceApp.ecommerceApp.rabbitMQ.AMQPProducer;
-import com.ecommerceApp.ecommerceApp.rabbitMQ.RabbitMQListener;
-import com.ecommerceApp.ecommerceApp.rabbitMQ.RabbitMQProperties;
+import com.ecommerceApp.ecommerceApp.rabbitMQ.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -102,6 +99,11 @@ public class OrderService {
        /*      if (true) {
                  throw new OutOfStockException("The quantity is not Available");
              }*/
+
+        System.out.println(("*****sending message*****"));
+        Notification msg=new Notification("to confirm order", product);
+        amqpProducer.sendMessage(msg);
+        System.out.println("====message send====");
         orderProductRepository.save(orderProduct);
         addressRepository.save(address);
         customerRepository.save(customer);
