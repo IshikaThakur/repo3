@@ -26,6 +26,10 @@ public class ReportController {
 
         return new ResponseEntity("Your task is in progress", HttpStatus.OK);
     }
+    @GetMapping(value = "product/gets/{report_id}")
+    public List generateReport(@PathVariable Long report_id) {
+        return reportRepository.generateReport(report_id);
+    }
 
 
 }

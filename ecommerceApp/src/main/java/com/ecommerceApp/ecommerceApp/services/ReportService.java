@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,35 +30,33 @@ public class ReportService {
 
     @Scheduled(cron = "0 */2 * ? * *")
     public void getRep() {
-
-
-        List<Object[]> products = productRepository.getProducts();
         Status status = new Status();
+        status.setStatusRepo(1);
+        List<Object[]> products = productRepository.getProducts();
+
+
         for (Object[] values : products) {
             Report report = new Report();
+            report.setReport_id(status.getReport_id());
             report.setProductname(values[0].toString());
             report.setSellername(values[1].toString());
             report.setBrand(values[2].toString());
             report.setCategoryName(values[3].toString());
-            report.setReport_id(status.getReport_id());
-            status.setStatusRepo(1);
-            reportRepository.save(report);
             statusRepository.save(status);
-        
+            reportRepository.save(report);
+
 
         }
 
     }
     public List<Report> getReports(Long report_id) {
-        Status status = statusRepository.getStatusRepo(report_id);
-        List<Report>reportList=null;
-        if (status.getReport_id() == 1) {
-        reportList = reportRepository.generateReport(report_id);
-        }
-        return reportList;
+        List<Report> reports = reportRepository.findAllPros(report_id);
+        List<Report> reports1 = new ArrayList<>();
+        reports.forEach(report -> reports1.add(report));
+        return reports1;
+
 
     }
-
 
 }
 

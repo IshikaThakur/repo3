@@ -1,13 +1,11 @@
 package com.ecommerceApp.ecommerceApp.Repositories;
 
-import com.ecommerceApp.ecommerceApp.entities.Product;
 import com.ecommerceApp.ecommerceApp.entities.Report;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ReportRepository extends CrudRepository<Report, Long> {
 
@@ -16,7 +14,7 @@ public interface ReportRepository extends CrudRepository<Report, Long> {
     public List generateReport(@Param("report_id")Long report_id);
 
     @Query(value = "select brand,productname,categoryName,sellername from Report where report_id =:report_id",nativeQuery = true)
-    List<Product> findAllPros(@Param("report_id")Long report_id);
+    public List findAllPros(@Param("report_id")Long report_id);
 
 
 

@@ -41,10 +41,6 @@ public class Product  implements Serializable {
      @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductReview> reviews;
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "report_id")
-    private Report report;
 
     {
         isActive = true;
@@ -177,13 +173,7 @@ public class Product  implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public Report getReport() {
-        return report;
-    }
 
-    public void setReport(Report report) {
-        this.report = report;
-    }
 
     public void addVariation(ProductVariation variation) {
         if (variation != null) {

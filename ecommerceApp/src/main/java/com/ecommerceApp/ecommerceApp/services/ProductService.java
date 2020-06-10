@@ -13,10 +13,10 @@ import com.ecommerceApp.ecommerceApp.entities.Report;
 import com.ecommerceApp.ecommerceApp.entities.Seller;
 import com.ecommerceApp.ecommerceApp.entities.Status;
 import com.ecommerceApp.ecommerceApp.entities.category.Category;
-import com.ecommerceApp.ecommerceApp.entities.category.CategoryMetadataField;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductDoesNotExistsException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotActiveException;
 import com.ecommerceApp.ecommerceApp.exceptions.ProductNotFoundException;
+import com.ecommerceApp.ecommerceApp.mongoDb.MongoProductRepository;
 import org.modelmapper.ModelMapper;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -29,10 +29,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -64,6 +62,7 @@ public class ProductService {
     @Autowired
     ReportRepository reportRepository;
 
+
     @Autowired
     ProductRepositoryCustom productRepositoryCustom;
     @Autowired
@@ -72,6 +71,8 @@ public class ProductService {
     CategoryMetadataFieldRepository categoryMetadataFieldRepository;
     @Autowired
     StatusRepository statusRepository;
+
+
 
 
     public Product toProduct(ProductSellerDto productSellerDto) {
@@ -137,9 +138,9 @@ public class ProductService {
                 "category - " + product.getCategory().getName() + "\n" +
                 "brand - " + product.getBrand() + "\n" +
                 "description - " + product.getDescription());
+        productRepository.save(product);
 
         emailSenderService.sendEmail(mailMessage);
-        productRepository.save(product);
         //return new ResponseEntity<>("Success", HttpStatus.OK);
         responseEntity = ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage
                 ("message-product-added", null, LocaleContextHolder.getLocale()));
